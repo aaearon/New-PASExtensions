@@ -22,6 +22,10 @@ Describe 'New-PASConnectionComponentPackage' {
             $ExpectedExpandedPackageJsonPath = "$TestDrive\PSM-SampleApp\package.json"
             Get-Item -Path $ExpectedExpandedPackageJsonPath | Should -Exist
         }
+
+        It 'ensures that the client app paths are not escaped' {
+
+        }
     }
 
     Context 'creating connection component xml settings' {
@@ -47,6 +51,10 @@ Describe 'New-PASConnectionComponentPackage' {
         It 'ensures that the xml file is in the root of the zip archive' {
             $ExpectedExpandedPackageJsonPath = "$TestDrive\PSM-RealVNC\PSM-RealVNC.xml"
             Get-Item -Path $ExpectedExpandedPackageJsonPath | Should -Exist
+        }
+
+        It 'ensures the XML file is named CC-whatver.xml' {
+
         }
     }
 }
