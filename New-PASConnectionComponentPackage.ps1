@@ -61,11 +61,14 @@
             }
 
             foreach ($Path in $ConnectionComponentApplicationPaths) {
-                $PackageJsonContent.ClientAppPaths += @{'Path' = $Path}
+                $PackageJsonContent.ClientAppPaths += @{Path = $Path}
             }
 
-            $PackageJsonContent | ConvertTo-Json | Out-File -FilePath "$ConnectionComponentWorkingDirectory\package.json" -Force
-            $FilesToArchive += "$ConnectionComponentWorkingDirectory\package.json"
+            $PackageJsonFilePath = "$ConnectionComponentWorkingDirectory\package.json"
+            # We need to UNESCAPE the slashes in the Paths before we write to file as the import scripts for the connection components package deployment
+            # process assumes the Paths are unescaped tries to escape it at time of import.
+            $PackageJsonContent | ConvertTo-Json | ForEach-Object { $_ -replace '\\\\','\' } | Out-File -FilePath $PackageJsonFilePath -Force
+            $FilesToArchive += $PackageJsonFilePath
         }
 
         if ($CreateConnectionComponentXmlFile) {
@@ -73,13 +76,14 @@
             $ConnectionComponentXml = Select-Xml -Xml $PVConfigurationXml -XPath "//ConnectionComponent[@Id='$ConnectionComponentId']"
 
             if ($null -ne $ConnectionComponentXml) {
-                $Output = $ConnectionComponentXml.Node.OuterXml
-                $Output | Out-File -FilePath "$ConnectionComponentWorkingDirectory\$ConnectionComponentId.xml" -Force
-                $FilesToArchive += "$ConnectionComponentWorkingDirectory\$ConnectionComponentId.xml"
+                $ConnectionComponentXmlFilePath = "$ConnectionComponentWorkingDirectory\CC-$ConnectionComponentId.xml"
+
+                $ConnectionComponentXml.Node.OuterXml | Out-File -FilePath $ConnectionComponentXmlFilePath -Force
+                $FilesToArchive += $ConnectionComponentXmlFilePath
             }
         }
 
-        Compress-Archive -Path $FilesToArchive -DestinationPath "$DestinationPath\$ConnectionComponentId.zip"
+        Compress-Archive -Path $FilesToArchive -DestinationPath "$DestinationPath\$ConnectionComponentId.zip" -CompressionLevel Fastest
     }
     end {
         Remove-Item $TemporaryDirectory -Force -Recurse
