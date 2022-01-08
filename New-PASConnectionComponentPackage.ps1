@@ -9,7 +9,7 @@
         # A path to a folder containing all the files to be a part of the connection component package.
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        # [ValidateScript( { Test-Path -Path $_ -PathType Leaf })]
+        [ValidateScript( { Test-Path -Path $_ -PathType Container })]
         [string]
         $PackageFilesPath,
 
