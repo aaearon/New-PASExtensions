@@ -3,6 +3,25 @@
 }
 
 Describe 'New-PASConnectionComponentPackage' {
+    Context 'when creating the package' {
+        It 'accepts a list of files from the pipeline' {
+            $BuildDirectory = Join-Path -Path $TestDrive -ChildPath 'Build'
+            New-Item -Path $BuildDirectory -ItemType Directory
+            Out-File -Path (Join-Path -Path $BuildDirectory -ChildPath 'Dispatcher.exe') -Force
+            Out-File -Path (Join-Path -Path $BuildDirectory -ChildPath 'Dispatcher.exe') -Force
+
+            Get-ChildItem -Path $BuildDirectory `
+            | New-PASConnectionComponentPackage -ConnectionComponentId PSM-SampleApp `
+                -ConnectionComponentApplicationPaths @('C:\SampleApp\SampleApp.exe', 'C:\SampleApp\Driver.exe') `
+                -DestinationPath "$TestDrive"
+
+            Expand-Archive "$TestDrive\PSM-SampleApp.zip" -DestinationPath "$TestDrive\PSM-SampleApp"
+            Test-Path -Path "$TestDrive\PSM-SampleApp\Dispatcher.exe" | Should -Be $true
+            Test-Path -Path "$TestDrive\PSM-SampleApp\DispatcherUtils.dll" | Should -Be $true
+
+        }
+    }
+
     Context 'creating package.json' {
         BeforeAll {
             Out-File -Path "$TestDrive\Dispatcher.exe"
@@ -15,7 +34,7 @@ Describe 'New-PASConnectionComponentPackage' {
         }
         It 'adds all connection component application paths to the clientapppaths array in package.json' {
             # We properly escape the file so we can successfully convert it to json.
-            $PackageJson = Get-Content -Path "$TestDrive\PSM-SampleApp\package.json" | ForEach-Object { $_ -replace '\\','\\' }
+            $PackageJson = Get-Content -Path "$TestDrive\PSM-SampleApp\package.json" | ForEach-Object { $_ -replace '\\', '\\' }
             $PackageJson = $PackageJson | ConvertFrom-Json
             $PackageJson.ClientAppPaths | Should -HaveCount 2
         }
