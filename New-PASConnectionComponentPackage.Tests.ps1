@@ -7,7 +7,7 @@ Describe 'New-PASConnectionComponentPackage' {
         BeforeAll {
             Out-File -Path "$TestDrive\Dispatcher.exe"
             New-PASConnectionComponentPackage -ConnectionComponentId PSM-SampleApp `
-                -PackageFilesPath "$TestDrive" `
+                -Path "$TestDrive" `
                 -ConnectionComponentApplicationPaths @('C:\SampleApp\SampleApp.exe', 'C:\SampleApp\Driver.exe') `
                 -DestinationPath "$TestDrive" `
 
@@ -42,7 +42,7 @@ Describe 'New-PASConnectionComponentPackage' {
             Copy-Item *.xml -Destination "$TestDrive\PVConfiguration.xml" -Force
 
             New-PASConnectionComponentPackage -ConnectionComponentId $ConnectionComponentId `
-                -PackageFilesPath "$TestDrive" `
+                -Path "$TestDrive" `
                 -ConnectionComponentApplicationPaths @('C:\SampleApp\SampleApp.exe', 'C:\SampleApp\Driver.exe') `
                 -DestinationPath "$TestDrive" `
                 -CreateConnectionComponentXmlFile $true `

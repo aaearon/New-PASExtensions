@@ -11,7 +11,7 @@
         [ValidateNotNullOrEmpty()]
         [ValidateScript( { Test-Path -Path $_ -PathType Container })]
         [string]
-        $PackageFilesPath,
+        $Path,
 
         # An array of paths used by the connection component application. These paths will be used to update AppLocker rules.
         [Parameter(Mandatory = $false)]
@@ -52,7 +52,7 @@
         $FilesToArchive = @()
 
         # Get the full file paths for all the files in $PackageFilesPath and add them to the array.
-        Get-ChildItem -Path $PackageFilesPath | ForEach-Object {$FilesToArchive += $_.FullName}
+        Get-ChildItem -Path $Path | ForEach-Object {$FilesToArchive += $_.FullName}
 
         if ($ConnectionComponentApplicationPaths.Count -gt 0) {
             $PackageJsonContent = [PSCustomObject]@{
@@ -60,8 +60,8 @@
                 ClientAppPaths = @()
             }
 
-            foreach ($Path in $ConnectionComponentApplicationPaths) {
-                $PackageJsonContent.ClientAppPaths += @{Path = $Path}
+            foreach ($ApplicationPath in $ConnectionComponentApplicationPaths) {
+                $PackageJsonContent.ClientAppPaths += @{Path = $ApplicationPath}
             }
 
             $PackageJsonFilePath = "$ConnectionComponentWorkingDirectory\package.json"
