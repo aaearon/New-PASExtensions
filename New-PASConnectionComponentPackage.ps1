@@ -9,12 +9,12 @@
 
         # A path to a folder containing all the files to be a part of the connection component package.
         [Parameter(
-            ValueFromPipelineByPropertyName = $true,
+            ValueFromPipeline = $true,
             Mandatory = $true
         )]
         [ValidateNotNullOrEmpty()]
         [ValidateScript( { Test-Path -Path $_ })]
-        [string]
+        [string[]]
         [Alias('PSPath')]
         $Path,
 
@@ -47,19 +47,12 @@
     )
 
     begin {
-        $TemporaryDirectory = New-TemporaryDirectory
-    }
-    process {
-        # We create a new temporary directory as we need to save generated files somewhere in order to add it to our archive
-        $ConnectionComponentWorkingDirectory = "$TemporaryDirectory\$ConnectionComponentId"
-        New-Item -Path $ConnectionComponentWorkingDirectory -ItemType Directory
-
         $FilesToArchive = @()
 
-        # Get the full file paths for all the files in $PackageFilesPath and add them to the array.
-        foreach ($P in $Path) {
-            Get-ChildItem -Path $P | ForEach-Object { $FilesToArchive += $_.FullName }
-        }
+        # We create a new temporary directory as we need to save generated files somewhere in order to add it to our archive
+        $TemporaryDirectory = New-TemporaryDirectory
+        $ConnectionComponentWorkingDirectory = "$TemporaryDirectory\$ConnectionComponentId"
+        New-Item -Path $ConnectionComponentWorkingDirectory -ItemType Directory
 
         if ($ConnectionComponentApplicationPaths.Count -gt 0) {
             $PackageJsonContent = [PSCustomObject]@{
@@ -89,15 +82,16 @@
                 $FilesToArchive += $ConnectionComponentXmlFilePath
             }
         }
-
-        Compress-Archive -Path $FilesToArchive -DestinationPath "$DestinationPath\$ConnectionComponentId.zip" -CompressionLevel Fastest
+    }
+    process {
+        Get-ChildItem -Path $Path | ForEach-Object { $FilesToArchive += $_.FullName }
 
     }
     end {
+        Compress-Archive -Path $FilesToArchive -DestinationPath "$DestinationPath\$ConnectionComponentId.zip" -CompressionLevel Fastest
         Remove-Item $TemporaryDirectory -Force -Recurse
     }
 }
-
 # https://stackoverflow.com/a/34559554
 function New-TemporaryDirectory {
     $parent = [System.IO.Path]::GetTempPath()
