@@ -1,4 +1,24 @@
 ﻿function New-PASConnectionComponentPackage {
+    <#
+    .SYNOPSIS
+        Creates a CyberArk Connection Component / Connector package.
+    .DESCRIPTION
+        Creates a CyberArk Connection Component / Connector package zip archive that can be deployed through the Privileged Vault Web Access or uploaded directly to the PSMUniversalConnectors safe. It will optionally create a 'package.json' (used to update AppLocker rules) and create a connection component settings XML file from an existing PVConfiguration.xml.
+    .EXAMPLE
+        PS C:\> New-PASConnectionComponentPackage -ConnectionComponentId PSM-SampleApp -Path C:\SampleAppDispatcherFiles -ConnectionComponentApplicationPaths @('C:\SampleApp\SampleApp.exe') -DestinationPath C:\ConnectionComponentPackages
+
+        Creates a connection component package zip archive for the PSM-SampleApp connection component. It includes all the files in C:\SampleAppDispatcherFiles directory and creates a 'package.json' where 'C:\SampleApp\SampleApp.exe' will be added to the AppLocker rules.
+    .EXAMPLE
+        PS C:\> New-PASConnectionComponentPackage -ConnectionComponentId PSM-SampleApp -Path C:\SampleAppDispatcherFiles -ConnectionComponentApplicationPaths @('C:\SampleApp\SampleApp.exe') -CreateConnectionComponentXmlFile $true -PVConfigurationPath 'C:\Program Files (x86)\CyberArk\PSM\Temp\PVConfiguration.xml -DestinationPath C:\ConnectionComponentPackages
+
+        Creates a connection component package zip archive for the PSM-SampleApp connection component. It includes all the files in C:\SampleAppDispatcherFiles directory and creates a 'package.json' where 'C:\SampleApp\SampleApp.exe' will be added to the AppLocker rules. It also extracts the connection component settings from the existing PVConfiguration.xml file defined and adds them as CC-PSM-SampleApp.xml to the archive.
+    .LINK
+        https://docs.cyberark.com/Product-Doc/OnlineHelp/PAS/Latest/en/Content/PASIMP/psm_Develop_universal_connector.htm
+    .LINK
+        https://docs.cyberark.com/Product-Doc/OnlineHelp/PAS/Latest/en/Content/PASIMP/ConfigurePSMUniversalConnector.htm
+    .LINK
+        https://docs.cyberark.com/Product-Doc/OnlineHelp/PAS/Latest/en/Content/WebServices/ImportConnComponent.htm
+    #>
     [CmdletBinding()]
     param (
         # The unique ID of the connection component. This will be used to name the zip archive and used to find an extract the connection component settings from an existing PVConfiguration.xml.
