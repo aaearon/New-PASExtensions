@@ -84,7 +84,7 @@
         }
     }
     process {
-        Get-ChildItem -Path $Path | ForEach-Object { $FilesToArchive += $_.FullName }
+        $FilesToArchive += Get-ChildItem -Path $Path | ForEach-Object FullName
 
     }
     end {
