@@ -8,7 +8,7 @@ Describe 'New-PASConnectionComponentPackage' {
             $BuildDirectory = Join-Path -Path $TestDrive -ChildPath 'Build'
             New-Item -Path $BuildDirectory -ItemType Directory
             Out-File -Path (Join-Path -Path $BuildDirectory -ChildPath 'Dispatcher.exe') -Force
-            Out-File -Path (Join-Path -Path $BuildDirectory -ChildPath 'Dispatcher.exe') -Force
+            Out-File -Path (Join-Path -Path $BuildDirectory -ChildPath 'DispatcherUtils.dll') -Force
 
             Get-ChildItem -Path $BuildDirectory `
             | New-PASConnectionComponentPackage -ConnectionComponentId PSM-SampleApp `
