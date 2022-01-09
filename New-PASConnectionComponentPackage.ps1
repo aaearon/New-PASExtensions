@@ -1,4 +1,5 @@
 ﻿function New-PASConnectionComponentPackage {
+    [CmdletBinding()]
     param (
         # The unique ID of the connection component. This will be used to name the zip archive and used to find an extract the connection component settings from an existing PVConfiguration.xml.
         [Parameter(Mandatory = $true)]
@@ -7,10 +8,14 @@
         $ConnectionComponentId,
 
         # A path to a folder containing all the files to be a part of the connection component package.
-        [Parameter(Mandatory = $true)]
+        [Parameter(
+            ValueFromPipelineByPropertyName = $true,
+            Mandatory = $true
+        )]
         [ValidateNotNullOrEmpty()]
-        [ValidateScript( { Test-Path -Path $_ -PathType Container })]
+        [ValidateScript( { Test-Path -Path $_ })]
         [string]
+        [Alias('PSPath')]
         $Path,
 
         # An array of paths used by the connection component application. These paths will be used to update AppLocker rules.
@@ -22,7 +27,7 @@
         [Parameter(
             ParameterSetName = 'CreateConnectionComponentXml',
             Mandatory = $false
-            )]
+        )]
         [boolean]
         $CreateConnectionComponentXmlFile = $false,
 
@@ -30,7 +35,7 @@
         [Parameter(
             ParameterSetName = 'CreateConnectionComponentXml',
             Mandatory = $false
-            )]
+        )]
         [ValidateNotNullOrEmpty()]
         [ValidateScript( { Test-Path -Path $_ -PathType Leaf })]
         [string]
@@ -52,22 +57,24 @@
         $FilesToArchive = @()
 
         # Get the full file paths for all the files in $PackageFilesPath and add them to the array.
-        Get-ChildItem -Path $Path | ForEach-Object {$FilesToArchive += $_.FullName}
+        foreach ($P in $Path) {
+            Get-ChildItem -Path $P | ForEach-Object { $FilesToArchive += $_.FullName }
+        }
 
         if ($ConnectionComponentApplicationPaths.Count -gt 0) {
             $PackageJsonContent = [PSCustomObject]@{
-                PackageName = $ConnectionComponentId;
+                PackageName    = $ConnectionComponentId;
                 ClientAppPaths = @()
             }
 
             foreach ($ApplicationPath in $ConnectionComponentApplicationPaths) {
-                $PackageJsonContent.ClientAppPaths += @{Path = $ApplicationPath}
+                $PackageJsonContent.ClientAppPaths += @{Path = $ApplicationPath }
             }
 
             $PackageJsonFilePath = "$ConnectionComponentWorkingDirectory\package.json"
             # We need to UNESCAPE the slashes in the Paths before we write to file as the import scripts for the connection components package deployment
             # process assumes the Paths are unescaped tries to escape it at time of import.
-            $PackageJsonContent | ConvertTo-Json | ForEach-Object { $_ -replace '\\\\','\' } | Out-File -FilePath $PackageJsonFilePath -Force
+            $PackageJsonContent | ConvertTo-Json | ForEach-Object { $_ -replace '\\\\', '\' } | Out-File -FilePath $PackageJsonFilePath -Force
             $FilesToArchive += $PackageJsonFilePath
         }
 
@@ -84,6 +91,7 @@
         }
 
         Compress-Archive -Path $FilesToArchive -DestinationPath "$DestinationPath\$ConnectionComponentId.zip" -CompressionLevel Fastest
+
     }
     end {
         Remove-Item $TemporaryDirectory -Force -Recurse
