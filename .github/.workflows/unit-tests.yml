@@ -8,7 +8,7 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2
-      - name: Perform a Pester test from the Tests.ps1 file
+      - name: Perform all Pester tests
         shell: pwsh
         run: |
           Invoke-Pester *.Tests.ps1 -Passthru
