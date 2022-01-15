@@ -1,0 +1,13 @@
+﻿name: Unit testing
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  pester-tests:
+    name: Run Pester tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Perform all Pester tests
+        shell: pwsh
+        run: |
+          Invoke-Pester *.Tests.ps1 -Passthru
