@@ -32,5 +32,6 @@ New-PASConnectionComponentPackage `
     -Path C:\SampleAppDispatcherFiles `
     -ConnectionComponentApplicationPaths @('C:\SampleApp\SampleApp.exe') `
     -CreateConnectionComponentXmlFile $true `
-    -PVConfigurationPath 'C:\Program Files (x86)\CyberArk\PSM\Temp\PVConfiguration.xml -DestinationPath C:\ConnectionComponentPackages
+    -PVConfigurationPath 'C:\Program Files (x86)\CyberArk\PSM\Temp\PVConfiguration.xml' `
+    -DestinationPath C:\ConnectionComponentPackages
 ```
