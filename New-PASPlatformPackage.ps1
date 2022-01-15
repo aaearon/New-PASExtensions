@@ -13,11 +13,16 @@
         [string]
         $CPMPolicyFile,
 
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $false)]
         [ValidateScript( { Test-Path -Path $_ -PathType Leaf })]
         [ValidateNotNullOrEmpty()]
         [string]
         $PVWASettingsFile,
+
+        # Parameter help description
+        [Parameter(Mandatory = $false)]
+        [boolean]
+        $ExtractPVWASettingsFromPoliciesFile,
 
         [Parameter(Mandatory = $false)]
         [ValidateScript( { Test-Path -Path $_ -PathType Leaf })]
@@ -51,8 +56,19 @@
         $CPMPolicyFile = Copy-Item -Path $CPMPolicyFile -Destination (Join-Path -Path $PlatformWorkingDirectory -ChildPath "Policy-$PlatformId.ini") -PassThru
         $FilesToArchive += $CPMPolicyFile
 
-        $PVWASettingsFile = Copy-Item -Path $PVWASettingsFile -Destination (Join-Path -Path $PlatformWorkingDirectory -ChildPath "Policy-$PlatformId.xml") -PassThru
-        $FilesToArchive += $PVWASettingsFile
+        if ($PVWASettingsFile) {
+            $PVWASettingsFile = Copy-Item -Path $PVWASettingsFile -Destination (Join-Path -Path $PlatformWorkingDirectory -ChildPath "Policy-$PlatformId.xml") -PassThru
+            $FilesToArchive += $PVWASettingsFile
+        }
+        elseif ($ExtractPVWASettingsFromPoliciesFile) {
+            $PVWASettingsFilePath = Join-Path -Path $PlatformWorkingDirectory -ChildPath "Policy-$PlatformId.xml"
+
+            $Settings = Get-PlatformPVWASettings -PlatformId $PlatformId -PoliciesFile $PoliciesFile
+            $Settings | Set-Content -Path $PVWASettingsFilePath
+            $FilesToArchive += $PVWASettingsFilePath
+        }
+
+
     }
     process {
         if ($Path.Count -gt 0) {
@@ -70,18 +86,23 @@
 
 function Get-PlatformPVWASettings {
     param (
-        $PlatformId,
-        $PoliciesFile
+        # Id of the platform to extract settings for.
+        [Parameter(Mandatory = $true)]
+        [string]$PlatformId,
+        # Path to the Policies.xml file to extract the settings from.
+        [Parameter(Mandatory = $true)]
+        [string]$PoliciesFile
     )
 
     $FileXml = [xml](Get-Content -Path $PoliciesFile)
-    $SelectXPath = "//Device/Policies/Policy[@ID='$PlatformId'] | //Usage[@ID='$PlatformId']"
+    $SelectXPath = "//Device/Policies/Policy[@ID='$PlatformId'] | //Usages/Usage[@ID='$PlatformId']"
     $PlatformXml = $FileXml.SelectSingleNode($SelectXPath)
 
     if ($PlatformXml.Name -eq 'Usage') {
         $SettingsXml = $PlatformXml
 
-    } elseif ($PlatformXml.Name -eq 'Policy') {
+    }
+    elseif ($PlatformXml.Name -eq 'Policy') {
 
         # Get name of the Device
         $DeviceName = $PlatformXml.ParentNode.ParentNode.Name
@@ -96,17 +117,19 @@ function Get-PlatformPVWASettings {
         # is implicity emitted to the pipeline.
         $NewXml.AppendChild($DeviceElement) | Out-Null
 
+        # Create and add Policies
         $PoliciesElement = $NewXml.CreateElement('Policies')
         $NewXml.Device.AppendChild($PoliciesElement) | Out-Null
 
-        $Policies = $NewXml.Device.SelectSingleNode('//Policies')
+        # Add the Policy element under Policies.
         $Policy = $NewXml.ImportNode($PlatformXml, $true)
-        $Policies.AppendChild($Policy) | Out-Null
+        # FirstChild = Policies in this case as there is only one child.
+        $NewXml.Device.FirstChild.AppendChild($Policy) | Out-Null
 
         $SettingsXml = $NewXml
-
     }
-        return $SettingsXml.OuterXml
+
+    return $SettingsXml.OuterXml
 }
 
 function New-TemporaryDirectory {
