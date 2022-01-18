@@ -1,4 +1,22 @@
 ﻿function New-PASPlatformPackage {
+    <#
+    .SYNOPSIS
+        Creates a CyberArk platform (policies and usages) package.
+    .DESCRIPTION
+        Creates a CyberArk platform package zip archive that can be deployed through the Privileged Vault Web Access. It will optionally create the PVWA settings from a provided Policies.xml file.
+    .EXAMPLE
+        PS C:\> Get-ChildItem C:\SamplePlatformBuild\files | New-PASPlatformPackage -PlatformId 'SamplePlatform' -CPMPolicyFile C:\SamplePlatformBuild\my-platforms-cpm-settings.ini -PVWASettingsFile C:\SamplePlatformBuild\my-platforms-pvwa-settings.xml
+
+        Creates a platform package zip archive for the SamplePlatform platform using the provided CPM policy and PVWA settings files. The optional platform files in C:\SamplePlatformBuild\files are included in the zip archive.
+    .EXAMPLE
+        PS C:\> New-PASPlatformPackage -PlatformId 'SamplePlatform' -CPMPolicyFile C:\SamplePlatformBuild\my-platforms-cpm-settings.ini -ExtractPVWASettings $true -PoliciesFile C:\Program Files (x86)\CyberArk\PSM\Temp
+
+        Creates a platform package zip archive for the SamplePlatform platform using the provided CPM policy. The PVWA settings file is extracted out of an existing Policies.xml file and included in the zip archive.
+    .LINK
+        https://docs.cyberark.com/Product-Doc/OnlineHelp/PAS/Latest/en/Content/Platforms/Platform-Packages-Import-Introduction.htm
+    .LINK
+        https://docs.cyberark.com/Product-Doc/OnlineHelp/PAS/Latest/en/Content/Platforms/Platform-Packages-Import-Introduction.htm#ImportaPlatformPackage
+    #>
     [CmdletBinding()]
     param (
         # Specifies the Id of the platform the package is being created for.
