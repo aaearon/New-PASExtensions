@@ -2,17 +2,35 @@
     [CmdletBinding()]
     param (
         # Specifies the Id of the platform the package is being created for.
-        [Parameter(Mandatory = $true)]
+        [Parameter(
+            Mandatory = $true,
+            ParameterSetName = 'ExtractPVWASettings'
+        )]
+        [Parameter(
+            Mandatory = $true,
+            ParameterSetName = 'ProvidePVWASettings'
+        )]
         [string]
         $PlatformId,
 
         # Specifies a path to the CPM Policy file to be included in the package.
-        [Parameter(Mandatory = $true)]
+        [Parameter(
+            Mandatory = $true,
+            ParameterSetName = 'ExtractPVWASettings'
+        )]
+        [Parameter(
+            Mandatory = $true,
+            ParameterSetName = 'ProvidePVWASettings'
+        )]
         [ValidateScript( { Test-Path -Path $_ -PathType Leaf })]
         [ValidateNotNullOrEmpty()]
         [string]
         $CPMPolicyFile,
 
+        [Parameter(
+            Mandatory = $false,
+            ParameterSetName = 'ProvidePVWASettings'
+        )]
         [Parameter(Mandatory = $false)]
         [ValidateScript( { Test-Path -Path $_ -PathType Leaf })]
         [ValidateNotNullOrEmpty()]
@@ -20,11 +38,17 @@
         $PVWASettingsFile,
 
         # Parameter help description
-        [Parameter(Mandatory = $false)]
+        [Parameter(
+            Mandatory = $false,
+            ParameterSetName = 'ExtractPVWASettings'
+        )]
         [boolean]
-        $ExtractPVWASettingsFromPoliciesFile,
+        $ExtractPVWASettings,
 
-        [Parameter(Mandatory = $false)]
+        [Parameter(
+            Mandatory = $true,
+            ParameterSetName = 'ExtractPVWASettings'
+        )]
         [ValidateScript( { Test-Path -Path $_ -PathType Leaf })]
         [ValidateNotNullOrEmpty()]
         [string]
@@ -33,7 +57,13 @@
         # Specifies a path to one or more locations.
         [Parameter(
             ValueFromPipeline = $true,
-            Mandatory = $false
+            Mandatory = $false,
+            ParameterSetName = 'ExtractPVWASettings'
+        )]
+        [Parameter(
+            ValueFromPipeline = $true,
+            Mandatory = $false,
+            ParameterSetName = 'ProvidePVWASettings'
         )]
         [ValidateNotNullOrEmpty()]
         [ValidateScript( { Test-Path -Path $_ })]
@@ -42,7 +72,14 @@
         $Path,
 
         # Folder path where to create the package zip archive.
-        [Parameter(Mandatory = $false)]
+        [Parameter(
+            Mandatory = $false,
+            ParameterSetName = 'ExtractPVWASettings'
+        )]
+        [Parameter(
+            Mandatory = $false,
+            ParameterSetName = 'ProvidePVWASettings'
+        )]
         $DestinationPath = $PWD
     )
 
@@ -56,19 +93,21 @@
         $CPMPolicyFile = Copy-Item -Path $CPMPolicyFile -Destination (Join-Path -Path $PlatformWorkingDirectory -ChildPath "Policy-$PlatformId.ini") -PassThru
         $FilesToArchive += $CPMPolicyFile
 
-        if ($PVWASettingsFile) {
-            $PVWASettingsFile = Copy-Item -Path $PVWASettingsFile -Destination (Join-Path -Path $PlatformWorkingDirectory -ChildPath "Policy-$PlatformId.xml") -PassThru
-            $FilesToArchive += $PVWASettingsFile
+        switch ($PSCmdlet.ParameterSetName) {
+            'ProvidePVWASettings' {
+                $PVWASettingsFile = Copy-Item -Path $PVWASettingsFile -Destination (Join-Path -Path $PlatformWorkingDirectory -ChildPath "Policy-$PlatformId.xml") -PassThru
+
+                $FilesToArchive += $PVWASettingsFile
+            }
+            'ExtractPVWASettings' {
+                $PVWASettingsFilePath = Join-Path -Path $PlatformWorkingDirectory -ChildPath "Policy-$PlatformId.xml"
+
+                $Settings = Get-PlatformPVWASettings -PlatformId $PlatformId -PoliciesFile $PoliciesFile
+                $Settings | Set-Content -Path $PVWASettingsFilePath
+
+                $FilesToArchive += $PVWASettingsFilePath
+            }
         }
-        elseif ($ExtractPVWASettingsFromPoliciesFile) {
-            $PVWASettingsFilePath = Join-Path -Path $PlatformWorkingDirectory -ChildPath "Policy-$PlatformId.xml"
-
-            $Settings = Get-PlatformPVWASettings -PlatformId $PlatformId -PoliciesFile $PoliciesFile
-            $Settings | Set-Content -Path $PVWASettingsFilePath
-            $FilesToArchive += $PVWASettingsFilePath
-        }
-
-
     }
     process {
         if ($Path.Count -gt 0) {

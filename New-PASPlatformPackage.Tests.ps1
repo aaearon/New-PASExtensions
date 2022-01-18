@@ -6,13 +6,16 @@
 
 Describe 'New-PASPlatformPackage' {
     BeforeAll {
+        # Set the generic details for the test
         $PlatformId = 'SamplePlatform'
         $CreatedArchivePath = Join-Path -Path $TestDrive -ChildPath "$PlatformId.zip"
         $ExpandedArchivePath = Join-Path -Path $TestDrive -ChildPath $PlatformId
 
+        # Create dummy files for the required platform files.
         Out-File -Path (Join-Path -Path $TestDrive -ChildPath "my-platforms-cpm-settings.ini") -Force
         Out-File -Path (Join-Path -Path $TestDrive -ChildPath "my-platforms-pvwa-settings.xml") -Force
 
+        # Create a directory and populate it for optional platform files
         $BuildDirectory = Join-Path -Path $TestDrive -ChildPath 'Build'
         New-Item -Path $BuildDirectory -ItemType Directory
         Out-File -Path (Join-Path -Path $BuildDirectory -ChildPath 'Prompts.ini') -Force
@@ -24,12 +27,12 @@ Describe 'New-PASPlatformPackage' {
             -PVWASettingsFile (Join-Path -Path $TestDrive -ChildPath "my-platforms-pvwa-settings.xml") `
             -DestinationPath "$TestDrive"
 
+        # Expand the archive as the tests depend on it.
         Expand-Archive $CreatedArchivePath -DestinationPath $ExpandedArchivePath
     }
     Context 'when creating the package' {
-        It 'accepts the plug-in files from the pipeline' {
-            Test-Path -Path "$TestDrive\$PlatformId\Prompts.ini" | Should -Be $true
-            Test-Path -Path "$TestDrive\$PlatformId\Processes.ini" | Should -Be $true
+        It 'accepts the plug-in files from the pipeline' -ForEach 'Processes.ini', 'Prompts.ini' {
+            Test-Path -Path (Join-Path -Path $TestDrive -ChildPath $PlatformId -AdditionalChildPath "$_") | Should -Be $true
         }
         It 'it must contain a <Type> file named <Name>' {
             Test-Path -Path (Join-Path -Path $TestDrive -ChildPath $PlatformId -AdditionalChildPath $Name) | Should -Be $true
@@ -39,17 +42,13 @@ Describe 'New-PASPlatformPackage' {
         )
     }
 
-    Context 'when adding the CPM policy file' {
-        It 'names the .ini based on the platformid' {}
-        It 'adds an .ini file specified at a local path' {}
-    }
-
     Context 'when creating the PVWA settings file' {
-        It 'names the PVWA settings file based on the platformid' {}
-        It 'it can create it based on an existing Policies.xml' {
+        BeforeAll {
             $PlatformId = 'CyberArk'
             $CreatedArchivePath = Join-Path -Path $TestDrive -ChildPath "$PlatformId.zip"
             $ExpandedArchivePath = Join-Path -Path $TestDrive -ChildPath $PlatformId
+
+            $ExpectedPVWASettingsPath = Join-Path -Path $ExpandedArchivePath -ChildPath "Policy-$PlatformId.xml"
 
             Out-File -Path (Join-Path -Path $TestDrive -ChildPath "my-platforms-cpm-settings.ini") -Force
             Copy-Item *.xml -Destination $TestDrive -Force
@@ -60,12 +59,19 @@ Describe 'New-PASPlatformPackage' {
             New-PASPlatformPackage `
                 -PlatformId $PlatformId `
                 -CPMPolicyFile (Join-Path -Path $TestDrive -ChildPath 'my-platforms-cpm-settings.ini') `
-                -ExtractPVWASettingsFromPoliciesFile $true `
+                -ExtractPVWASettings $true `
                 -PoliciesFile (Join-Path -Path $TestDrive -ChildPath 'Policies.xml') `
                 -DestinationPath $TestDrive
 
             Expand-Archive -Path $CreatedArchivePath -DestinationPath $ExpandedArchivePath
-            Test-Path -Path (Join-Path -Path $ExpandedArchivePath -ChildPath "Policy-$PlatformId.xml") | Should -Be $true
+        }
+        It 'names the PVWA settings file based on the platformid' {
+            Test-Path -Path $ExpectedPVWASettingsPath | Should -Be $true
+        }
+        It 'it can create it based on an existing Policies.xml' {
+            [xml]$PlatformSettingsXml = Get-Content $ExpectedPVWASettingsPath
+
+            Select-Xml $PlatformSettingsXml -XPath "//Device[@Name='Application']/Policies/Policy[@ID='CyberArk']/PrivilegedSessionManagement[@ID='PSMServer_2ab6ce8']" | Should -Be $true
         }
     }
 }
