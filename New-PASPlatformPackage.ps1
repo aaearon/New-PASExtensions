@@ -9,7 +9,7 @@
 
         Creates a platform package zip archive for the SamplePlatform platform using the provided CPM policy and PVWA settings files. The optional platform files in C:\SamplePlatformBuild\files are included in the zip archive.
     .EXAMPLE
-        PS C:\> New-PASPlatformPackage -PlatformId 'SamplePlatform' -CPMPolicyFile C:\SamplePlatformBuild\my-platforms-cpm-settings.ini -ExtractPVWASettings $true -PoliciesFile C:\Program Files (x86)\CyberArk\PSM\Temp
+        PS C:\> New-PASPlatformPackage -PlatformId 'SamplePlatform' -CPMPolicyFile C:\SamplePlatformBuild\my-platforms-cpm-settings.ini -ExtractPVWASettings $true -PoliciesFile 'C:\Program Files (x86)\CyberArk\PSM\Temp'
 
         Creates a platform package zip archive for the SamplePlatform platform using the provided CPM policy. The PVWA settings file is extracted out of an existing Policies.xml file and included in the zip archive.
     .LINK
