@@ -1,0 +1,1559 @@
+<PasswordVaultPolicies>
+  <VersionInformation ProductVersion="120100" />
+  <Devices>
+    <Device Name="Application">
+      <Properties>
+        <Required>
+        </Required>
+        <Optional />
+      </Properties>
+      <Policies>
+        <Policy ID="CyberArk" AutoChangeOnAdd="No" AutoVerifyOnAdd="No" PlatformBaseID="CyberArk" PlatformBaseType="CyberArk" PlatformBaseProtocol="CyberArk">
+          <TicketingSystem EnterTicketingInfo="No" ValidateTicketNumber="No" />
+          <Properties>
+            <Required>
+              <Property Name="Username" />
+              <Property Name="Address" />
+            </Required>
+            <Optional>
+              <Property Name="Port" />
+              <Property Name="Timeout" />
+              <Property Name="ReconnectPeriod" />
+              <Property Name="ProxyType" />
+              <Property Name="ProxyAddress" />
+              <Property Name="ProxyPort" />
+              <Property Name="ProxyAuthDomain" />
+              <Property Name="ProxyUser" />
+              <Property Name="ProxyPassword" />
+              <Property Name="BehindFireWall" />
+              <Property Name="UseOnlyHTTP1" />
+            </Optional>
+          </Properties>
+          <PrivilegedSessionManagement ID="PSMServer_2ab6ce8" />
+          <ConnectionComponents>
+            <ConnectionComponent Id="PSM-PVWA" />
+            <ConnectionComponent Id="PSM-PVWA-v10" />
+            <ConnectionComponent Id="PSM-PrivateArkClient" />
+          </ConnectionComponents>
+        </Policy>
+        <Policy ID="SAP" AutoChangeOnAdd="No" AutoVerifyOnAdd="No" PlatformBaseID="SAP" PlatformBaseType="SAP" PlatformBaseProtocol="SAP">
+          <TicketingSystem EnterTicketingInfo="No" ValidateTicketNumber="No" />
+          <Properties>
+            <Required>
+              <Property Name="Username" />
+              <Property Name="Address" />
+              <Property Name="SystemNumber" />
+              <Property Name="Client" />
+            </Required>
+            <Optional>
+              <Property Name="UserType" DisplayName="User Type" />
+              <Property Name="UseSNC" DisplayName="Use SNC" />
+              <Property Name="PartnerName" />
+              <Property Name="MyName" />
+            </Optional>
+          </Properties>
+          <LinkedPasswords>
+            <Link Name="LogonReconcileAccount" PropertyIndex="1" />
+          </LinkedPasswords>
+          <PrivilegedSessionManagement ID="PSMServer_2ab6ce8" />
+          <ConnectionComponents>
+            <ConnectionComponent Id="PSM-SAPGUI" />
+          </ConnectionComponents>
+        </Policy>
+        <Policy ID="RSAManagement" PlatformBaseID="RSAManagement" PlatformBaseType="RSA" PlatformBaseProtocol="API" AutoChangeOnAdd="No" AutoVerifyOnAdd="No">
+          <Properties>
+            <Required>
+              <Property Name="Username" />
+              <Property Name="Address" />
+              <Property Name="RSAUserType" DisplayName="RSA User Type" />
+            </Required>
+            <Optional />
+          </Properties>
+          <LinkedPasswords>
+            <Link Name="LogonAccount" PropertyIndex="1" />
+            <Link Name="ChangeAccount" DisplayName="Security Change Account" PropertyIndex="2" />
+            <Link Name="ReconcileAccount" PropertyIndex="3" />
+          </LinkedPasswords>
+          <TicketingSystem EnterTicketingInfo="No" ValidateTicketNumber="No" />
+        </Policy>
+        <Policy ID="CyberArkPTA" PlatformBaseID="CyberArkPTA" PlatformBaseType="PTA" PlatformBaseProtocol="Rest">
+          <Properties>
+            <Required>
+              <Property Name="Address" />
+              <Property Name="Username" />
+            </Required>
+            <Optional>
+              <Property Name="Port" />
+              <Property Name="IgnoreCertificate" />
+            </Optional>
+          </Properties>
+          <LinkedPasswords />
+          <TicketingSystem EnterTicketingInfo="No" ValidateTicketNumber="No" />
+          <PrivilegedSessionManagement ID="PSMServer_2ab6ce8" />
+          <ConnectionComponents>
+            <ConnectionComponent Id="PSM-PTA" />
+          </ConnectionComponents>
+        </Policy>
+        <Policy ID="ConjurHost" PlatformBaseID="ConjurHost" PlatformBaseType="Conjur" PlatformBaseProtocol="HTTP">
+          <TicketingSystem />
+          <Properties>
+            <Required>
+              <Property Name="HostName" DisplayName="Host Name" />
+              <Property Name="ApplianceURL" DisplayName="Appliance URL" />
+            </Required>
+            <Optional>
+              <Property Name="ConjurAccount" DisplayName="Conjur Account" />
+            </Optional>
+          </Properties>
+          <LinkedPasswords />
+          <ConnectionComponents />
+          <Usages />
+        </Policy>
+      </Policies>
+    </Device>
+    <Device Name="Operating System">
+      <Properties>
+        <Required>
+        </Required>
+        <Optional />
+      </Properties>
+      <Policies>
+        <Policy ID="WinDomain" AutoChangeOnAdd="No" AutoVerifyOnAdd="No" PlatformBaseID="WinDomain" PlatformBaseType="Windows" PlatformBaseProtocol="Windows">
+          <Properties>
+            <Required>
+              <Property Name="Address" />
+              <Property Name="Username" />
+            </Required>
+            <Optional>
+              <Property Name="LogonDomain" ResolveFrom="Address" />
+              <Property Name="UserDN" />
+              <Property Name="Port" />
+            </Optional>
+          </Properties>
+          <LinkedPasswords>
+            <Link Name="LogonAccount" PropertyIndex="1" />
+            <Link Name="ReconcileAccount" PropertyIndex="3" />
+          </LinkedPasswords>
+          <Usages>
+            <Usage Name="WinService" />
+            <Usage Name="SchedTask" />
+            <Usage Name="IISAppPool" />
+            <Usage Name="Registry" />
+            <Usage Name="ComPlus" />
+            <Usage Name="IISAnonymous" />
+          </Usages>
+          <TicketingSystem EnterTicketingInfo="No" ValidateTicketNumber="No" />
+          <PrivilegedSessionManagement ID="PSMServer_2ab6ce8" />
+          <ConnectionComponents>
+            <ConnectionComponent Id="PSM-RDP">
+              <OverrideUserParameters>
+                <Parameter Name="PSMRemoteMachine" Type="CyberArk.PasswordVault.Web.TransparentConnection.RemoteMachineUserParameter, CyberArk.PasswordVault.Web" />
+                <Parameter Name="LogonDomain" Type="CyberArk.PasswordVault.TransparentConnection.PSM.LogonDomainUserParameter, CyberArk.PasswordVault.TransparentConnection.PSM" />
+              </OverrideUserParameters>
+            </ConnectionComponent>
+            <ConnectionComponent Id="RDP">
+              <OverrideUserParameters>
+                <Parameter Name="RemoteMachine" Type="CyberArk.PasswordVault.Web.TransparentConnection.RemoteMachineUserParameter, CyberArk.PasswordVault.Web" />
+              </OverrideUserParameters>
+            </ConnectionComponent>
+            <ConnectionComponent Id="RDPWinApplet">
+              <OverrideUserParameters>
+                <Parameter Name="RemoteMachine" Type="CyberArk.PasswordVault.Web.TransparentConnection.RemoteMachineUserParameter, CyberArk.PasswordVault.Web" />
+              </OverrideUserParameters>
+            </ConnectionComponent>
+            <ConnectionComponent Id="RDPapplet">
+              <OverrideUserParameters>
+                <Parameter Name="RemoteMachine" Type="CyberArk.PasswordVault.Web.TransparentConnection.RemoteMachineUserParameter, CyberArk.PasswordVault.Web" />
+              </OverrideUserParameters>
+            </ConnectionComponent>
+          </ConnectionComponents>
+        </Policy>
+        <Policy ID="WinServerLocal" AutoChangeOnAdd="No" AutoVerifyOnAdd="No" PlatformBaseID="WinServerLocal" PlatformBaseType="Windows" PlatformBaseProtocol="Windows">
+          <Properties>
+            <Required>
+              <Property Name="Address" />
+              <Property Name="Username" />
+            </Required>
+            <Optional>
+              <Property Name="LogonDomain" ResolveFrom="Address" />
+              <Property Name="Location" />
+              <Property Name="OwnerName" />
+            </Optional>
+          </Properties>
+          <LinkedPasswords>
+            <Link Name="LogonAccount" PropertyIndex="1" />
+            <Link Name="ReconcileAccount" PropertyIndex="3" />
+          </LinkedPasswords>
+          <Usages>
+            <Usage Name="WinService" />
+            <Usage Name="SchedTask" />
+            <Usage Name="IISAppPool" />
+            <Usage Name="Registry" />
+            <Usage Name="ComPlus" />
+            <Usage Name="IISAnonymous" />
+          </Usages>
+          <TicketingSystem EnterTicketingInfo="No" ValidateTicketNumber="No" />
+          <PrivilegedSessionManagement ID="PSMServer_2ab6ce8" />
+          <ConnectionComponents>
+            <ConnectionComponent Id="PSM-RDP" />
+            <ConnectionComponent Id="RDP" />
+            <ConnectionComponent Id="RDPWinApplet" />
+            <ConnectionComponent Id="RDPapplet" />
+          </ConnectionComponents>
+        </Policy>
+        <Policy ID="WinDesktopLocal" AutoChangeOnAdd="No" AutoVerifyOnAdd="No" PlatformBaseID="WinDesktopLocal" PlatformBaseType="Windows" PlatformBaseProtocol="Windows">
+          <Properties>
+            <Required>
+              <Property Name="Address" />
+              <Property Name="Username" />
+            </Required>
+            <Optional>
+              <Property Name="LogonDomain" ResolveFrom="Address" />
+              <Property Name="Location" />
+              <Property Name="OwnerName" />
+            </Optional>
+          </Properties>
+          <LinkedPasswords>
+            <Link Name="LogonAccount" PropertyIndex="1" />
+            <Link Name="ReconcileAccount" PropertyIndex="3" />
+          </LinkedPasswords>
+          <Usages>
+            <Usage Name="WinService" />
+            <Usage Name="SchedTask" />
+            <Usage Name="IISAppPool" />
+            <Usage Name="Registry" />
+            <Usage Name="ComPlus" />
+            <Usage Name="IISAnonymous" />
+          </Usages>
+          <TicketingSystem EnterTicketingInfo="No" ValidateTicketNumber="No" />
+          <PrivilegedSessionManagement ID="PSMServer_2ab6ce8" />
+          <ConnectionComponents>
+            <ConnectionComponent Id="PSM-RDP" />
+            <ConnectionComponent Id="RDP" />
+            <ConnectionComponent Id="RDPWinApplet" />
+            <ConnectionComponent Id="RDPapplet" />
+          </ConnectionComponents>
+        </Policy>
+        <Policy ID="WinLocalWMI" PlatformBaseID="WinLocalWMI" PlatformBaseType="Windows" PlatformBaseProtocol="WMI">
+          <TicketingSystem />
+          <Properties>
+            <Required>
+              <Property Name="Address" />
+              <Property Name="Username" />
+            </Required>
+            <Optional>
+              <Property Name="LogonDomain" ResolveFrom="Address" />
+              <Property Name="Location" />
+              <Property Name="OwnerName" />
+            </Optional>
+          </Properties>
+          <LinkedPasswords>
+            <Link Name="LogonAccount" PropertyIndex="1" />
+            <Link Name="ReconcileAccount" PropertyIndex="3" />
+          </LinkedPasswords>
+          <ConnectionComponents>
+            <ConnectionComponent Id="PSM-RDP" />
+            <ConnectionComponent Id="RDP" />
+            <ConnectionComponent Id="RDPWinApplet" />
+            <ConnectionComponent Id="RDPapplet" />
+          </ConnectionComponents>
+          <Usages>
+            <Usage Name="WinService" />
+            <Usage Name="SchedTask" />
+            <Usage Name="IISAppPool" />
+            <Usage Name="Registry" />
+            <Usage Name="ComPlus" />
+            <Usage Name="IISAnonymous" />
+            <Usage Name="DBString" />
+          </Usages>
+        </Policy>
+        <Policy ID="as400" AutoChangeOnAdd="No" AutoVerifyOnAdd="No" PlatformBaseID="as400" PlatformBaseType="iSeries" PlatformBaseProtocol="as400">
+          <Properties>
+            <Required>
+              <Property Name="Address" />
+              <Property Name="Username" />
+            </Required>
+            <Optional>
+              <Property Name="AS400AccountType" />
+            </Optional>
+          </Properties>
+          <LinkedPasswords>
+            <Link Name="LogonAccount" PropertyIndex="1" />
+            <Link Name="ReconcileAccount" PropertyIndex="3" />
+          </LinkedPasswords>
+          <TicketingSystem EnterTicketingInfo="No" ValidateTicketNumber="No" />
+          <PrivilegedSessionManagement ID="PSMServer_2ab6ce8" />
+          <ConnectionComponents>
+            <ConnectionComponent Id="PSM-AS400" />
+          </ConnectionComponents>
+        </Policy>
+        <Policy ID="UnixSSH" AutoChangeOnAdd="No" AutoVerifyOnAdd="No" PlatformBaseID="UnixSSH" PlatformBaseType="Unix" PlatformBaseProtocol="SSH">
+          <Properties>
+            <Required>
+              <Property Name="Address" />
+              <Property Name="Username" />
+            </Required>
+            <Optional>
+              <Property Name="UseSudoOnReconcile" />
+            </Optional>
+          </Properties>
+          <LinkedPasswords>
+            <Link Name="LogonAccount" PropertyIndex="1" />
+            <Link Name="ReconcileAccount" PropertyIndex="3" />
+          </LinkedPasswords>
+          <TicketingSystem EnterTicketingInfo="No" ValidateTicketNumber="No" />
+          <PrivilegedSessionManagement Enable="Yes" ID="PSMServer_2ab6ce8">
+            <SSHProxy />
+          </PrivilegedSessionManagement>
+          <ConnectionComponents>
+            <ConnectionComponent Id="PSM-SSH" />
+            <ConnectionComponent Id="SSH" />
+            <ConnectionComponent Id="PuTTY" Enable="No" />
+            <ConnectionComponent Id="PSM-WinSCP" />
+          </ConnectionComponents>
+          <OnDemandPrivilegesManager>
+            <Commands />
+            <Defaults />
+            <Authentication />
+            <CommandsGroups>
+              <CommandsGroup Name="SHELLS">
+                <Command Name="/bin/bash" />
+                <Command Name="/bin/csh" />
+                <Command Name="/bin/tcsh" />
+                <Command Name="/bin/ksh" />
+                <Command Name="/bin/ksh93" />
+                <Command Name="/usr/bin/bash" />
+                <Command Name="/usr/bin/csh" />
+                <Command Name="/usr/bin/tcsh" />
+                <Command Name="/usr/bin/ksh" />
+                <Command Name="/opt/freeware/bin/bash" />
+                <Command Name="/opt/freeware/bin/bash_32" />
+                <Command Name="/opt/freeware/bin/bash_64" />
+                <Command Name="/opt/freeware/bin/tcsh" />
+                <Command Name="/bin/sh" />
+                <Command Name="/usr/bin/sh" />
+                <Command Name="/usr/bin/ksh93" />
+              </CommandsGroup>
+              <CommandsGroup Name="BashProfile">
+                <Command Name="/bin/grep .*" />
+                <Command Name="/bin/uname -m" />
+                <Command Name="/sbin/consoletype stdout" />
+                <Command Name="/usr/bin/abrt-cli status .*" />
+                <Command Name="/usr/bin/cat /root/.cache/abrt/lastnotification" />
+                <Command Name="/usr/bin/date \+\%s" />
+                <Command Name="/usr/bin/dircolors --sh .*" />
+                <Command Name="/usr/bin/grep .*" />
+                <Command Name="/usr/bin/id -u" />
+                <Command Name="/usr/bin/ls /etc/bash_completion.d" />
+                <Command Name="/usr/bin/mkdir -p /root/.cache/abrt" />
+                <Command Name="/usr/bin/mktemp .colorlsXXX --tmpdir=/tmp" />
+                <Command Name="/usr/bin/mktemp --tmpdir=/root/.cache/abrt lastnotification.XXXXXXXX" />
+                <Command Name="/usr/bin/mv -i -f /root/.cache/abrt/lastnotification.\w{8} /root/.cache/abrt/lastnotification" />
+                <Command Name="/usr/bin/rm -i -f /tmp/.colorls\w{3}" />
+                <Command Name="/usr/bin/tput colors" />
+                <Command Name="/usr/bin/tty -s" />
+                <Command Name="/usr/bin/uname .*" />
+                <Command Name="/usr/libexec/grepconf.sh -c" />
+                <Command Name="/usr/sbin/lspci" />
+                <Command Name="/bin/ps -p \d+ -ocomm=" />
+                <Command Name="/bin/basename \w+" />
+                <Command Name="/bin/sed -n s\/\[ \t\#\]\.\*\$\/\/\; \/\.\/H\; \$ \{ x\; s\/\^\\n\/\/\; s\/\\n\/\:\/g\; p\; \} /usr/share/Modules/init/.modulespath" />
+              </CommandsGroup>
+              <CommandsGroup Name="tcshProfile">
+                <Command Name="/bin/grep .*" />
+                <Command Name="/bin/sed -n \/\^COLOR\.\*none\/Ip" />
+                <Command Name="/sbin/consoletype stdout" />
+                <Command Name="/usr/bin/cat /etc/DIR_COLORS" />
+                <Command Name="/usr/bin/cut .*" />
+                <Command Name="/usr/bin/dircolors -c .*" />
+                <Command Name="/usr/bin/grep .*" />
+                <Command Name="/usr/bin/id .*" />
+                <Command Name="/usr/bin/mktemp .colorlsXXX --tmpdir=/tmp" />
+                <Command Name="/usr/bin/rm -f /tmp/.colorls\w{3}" />
+                <Command Name="/usr/bin/sed -n \/\^COLOR\.\*none\/Ip" />
+                <Command Name="/usr/bin/test .*" />
+                <Command Name="/usr/bin/tput colors" />
+                <Command Name="/usr/bin/uname -m" />
+                <Command Name="/usr/libexec/grepconf.sh -c" />
+                <Command Name="/usr/sbin/lspci" />
+                <Command Name="/bin/uname -m" />
+                <Command Name="/bin/sed -n s\/\[ \t\#\]\.\*\$\/\/\; \/\.\/H\; \$ \{ x\; s\/\^\\n\/\/\; s\/\\n\/\:\/g\; p\; \} /usr/share/Modules/init/.modulespath" />
+                <Command Name="/bin/cut .*" />
+                <Command Name="/bin/sed s\|\$\|\;\|" />
+                <Command Name="/bin/sed s\|\\\(\[\^\=\]\*\\\)\=\\\(\[\^\=\]\*\\\)\|setenv \\1 \\2\|g" />
+              </CommandsGroup>
+              <CommandsGroup Name="sysconfig-network-linux4">
+                <Command Name="/usr/bin/system-config-network" />
+                <Command Name="/usr/bin/consolehelper-gtk" />
+                <Command Name="/usr/sbin/userhelper .*" />
+                <Command Name="/usr/sbin/system-config-network" />
+                <Command Name="/usr/sbin/system-config-network-tui" />
+                <Command Name="/usr/bin/consolehelper" />
+              </CommandsGroup>
+            </CommandsGroups>
+          </OnDemandPrivilegesManager>
+        </Policy>
+        <Policy ID="UnixSSHKeys" AutoChangeOnAdd="No" AutoVerifyOnAdd="No" PlatformBaseID="UnixSSHKeys" PlatformBaseType="Unix" PlatformBaseProtocol="SSH">
+          <Properties>
+            <Required>
+              <Property Name="Address" />
+              <Property Name="Username" />
+            </Required>
+            <Optional>
+              <Property Name="Comment" />
+              <Property Name="ConnectionTimeout" />
+              <Property Name="Port" />
+              <Property Name="PublicSSHKeyPath" />
+              <Property Name="UseSudoOnReconcile" />
+              <Property Name="StandardPrompt" />
+              <Property Name="PopulateIfNotExist" />
+              <Property Name="CommandExecutionTimeout" />
+            </Optional>
+          </Properties>
+          <LinkedPasswords>
+            <Link Name="LogonAccount" PropertyIndex="1" />
+            <Link Name="ReconcileAccount" PropertyIndex="3" />
+          </LinkedPasswords>
+          <Usages>
+            <Usage Name="PrivateSSHKey" />
+          </Usages>
+          <TicketingSystem EnterTicketingInfo="No" ValidateTicketNumber="No" />
+          <PrivilegedSessionManagement Enable="Yes" ID="PSMServer_2ab6ce8">
+            <SSHProxy />
+          </PrivilegedSessionManagement>
+          <ConnectionComponents>
+            <ConnectionComponent Id="PSM-SSH" />
+            <ConnectionComponent Id="SSH" />
+            <ConnectionComponent Id="PuTTY" Enable="No" />
+            <ConnectionComponent Id="PSM-WinSCP" Enable="No" />
+            <ConnectionComponent Id="PSMP-SSH" />
+          </ConnectionComponents>
+          <OnDemandPrivilegesManager>
+            <Commands />
+            <Defaults />
+            <Authentication />
+            <CommandsGroups>
+              <CommandsGroup Name="SHELLS">
+                <Command Name="/bin/bash" />
+                <Command Name="/bin/csh" />
+                <Command Name="/bin/tcsh" />
+                <Command Name="/bin/ksh" />
+                <Command Name="/bin/ksh93" />
+                <Command Name="/usr/bin/bash" />
+                <Command Name="/usr/bin/csh" />
+                <Command Name="/usr/bin/tcsh" />
+                <Command Name="/usr/bin/ksh" />
+                <Command Name="/opt/freeware/bin/bash" />
+                <Command Name="/opt/freeware/bin/bash_32" />
+                <Command Name="/opt/freeware/bin/bash_64" />
+                <Command Name="/opt/freeware/bin/tcsh" />
+                <Command Name="/bin/sh" />
+                <Command Name="/usr/bin/sh" />
+                <Command Name="/usr/bin/ksh93" />
+              </CommandsGroup>
+              <CommandsGroup Name="BashProfile">
+                <Command Name="/bin/grep .*" />
+                <Command Name="/bin/uname -m" />
+                <Command Name="/sbin/consoletype stdout" />
+                <Command Name="/usr/bin/abrt-cli status .*" />
+                <Command Name="/usr/bin/cat /root/.cache/abrt/lastnotification" />
+                <Command Name="/usr/bin/date \+\%s" />
+                <Command Name="/usr/bin/dircolors --sh .*" />
+                <Command Name="/usr/bin/grep .*" />
+                <Command Name="/usr/bin/id -u" />
+                <Command Name="/usr/bin/ls /etc/bash_completion.d" />
+                <Command Name="/usr/bin/mkdir -p /root/.cache/abrt" />
+                <Command Name="/usr/bin/mktemp .colorlsXXX --tmpdir=/tmp" />
+                <Command Name="/usr/bin/mktemp --tmpdir=/root/.cache/abrt lastnotification.XXXXXXXX" />
+                <Command Name="/usr/bin/mv -i -f /root/.cache/abrt/lastnotification.\w{8} /root/.cache/abrt/lastnotification" />
+                <Command Name="/usr/bin/rm -i -f /tmp/.colorls\w{3}" />
+                <Command Name="/usr/bin/tput colors" />
+                <Command Name="/usr/bin/tty -s" />
+                <Command Name="/usr/bin/uname .*" />
+                <Command Name="/usr/libexec/grepconf.sh -c" />
+                <Command Name="/usr/sbin/lspci" />
+                <Command Name="/bin/ps -p \d+ -ocomm=" />
+                <Command Name="/bin/basename \w+" />
+                <Command Name="/bin/sed -n s\/\[ \t\#\]\.\*\$\/\/\; \/\.\/H\; \$ \{ x\; s\/\^\\n\/\/\; s\/\\n\/\:\/g\; p\; \} /usr/share/Modules/init/.modulespath" />
+              </CommandsGroup>
+              <CommandsGroup Name="tcshProfile">
+                <Command Name="/bin/grep .*" />
+                <Command Name="/bin/sed -n \/\^COLOR\.\*none\/Ip" />
+                <Command Name="/sbin/consoletype stdout" />
+                <Command Name="/usr/bin/cat /etc/DIR_COLORS" />
+                <Command Name="/usr/bin/cut .*" />
+                <Command Name="/usr/bin/dircolors -c .*" />
+                <Command Name="/usr/bin/grep .*" />
+                <Command Name="/usr/bin/id .*" />
+                <Command Name="/usr/bin/mktemp .colorlsXXX --tmpdir=/tmp" />
+                <Command Name="/usr/bin/rm -f /tmp/.colorls\w{3}" />
+                <Command Name="/usr/bin/sed -n \/\^COLOR\.\*none\/Ip" />
+                <Command Name="/usr/bin/test .*" />
+                <Command Name="/usr/bin/tput colors" />
+                <Command Name="/usr/bin/uname -m" />
+                <Command Name="/usr/libexec/grepconf.sh -c" />
+                <Command Name="/usr/sbin/lspci" />
+                <Command Name="/bin/uname -m" />
+                <Command Name="/bin/sed -n s\/\[ \t\#\]\.\*\$\/\/\; \/\.\/H\; \$ \{ x\; s\/\^\\n\/\/\; s\/\\n\/\:\/g\; p\; \} /usr/share/Modules/init/.modulespath" />
+                <Command Name="/bin/cut .*" />
+                <Command Name="/bin/sed s\|\$\|\;\|" />
+                <Command Name="/bin/sed s\|\\\(\[\^\=\]\*\\\)\=\\\(\[\^\=\]\*\\\)\|setenv \\1 \\2\|g" />
+              </CommandsGroup>
+              <CommandsGroup Name="sysconfig-network-linux4">
+                <Command Name="/usr/bin/system-config-network" />
+                <Command Name="/usr/bin/consolehelper-gtk" />
+                <Command Name="/usr/sbin/userhelper .*" />
+                <Command Name="/usr/sbin/system-config-network" />
+                <Command Name="/usr/sbin/system-config-network-tui" />
+                <Command Name="/usr/bin/consolehelper" />
+              </CommandsGroup>
+            </CommandsGroups>
+          </OnDemandPrivilegesManager>
+        </Policy>
+        <Policy ID="OS390SSH" AutoChangeOnAdd="No" AutoVerifyOnAdd="No" PlatformBaseID="OS390SSH" PlatformBaseType="OS390" PlatformBaseProtocol="SSH">
+          <Properties>
+            <Required>
+              <Property Name="Address" />
+              <Property Name="Username" />
+            </Required>
+            <Optional />
+          </Properties>
+          <LinkedPasswords>
+            <Link Name="LogonAccount" PropertyIndex="1" />
+          </LinkedPasswords>
+          <TicketingSystem EnterTicketingInfo="No" ValidateTicketNumber="No" />
+          <PrivilegedSessionManagement ID="PSMServer_2ab6ce8" />
+          <ConnectionComponents>
+            <ConnectionComponent Id="PSM-OS390" />
+            <ConnectionComponent Id="PSM-SSH" />
+          </ConnectionComponents>
+        </Policy>
+        <Policy ID="VMWareESX-API" AutoChangeOnAdd="No" AutoVerifyOnAdd="No" PlatformBaseID="VMWareESX-API" PlatformBaseType="VMWareESX" PlatformBaseProtocol="VMWare">
+          <Properties>
+            <Required>
+              <Property Name="Address" />
+              <Property Name="Username" />
+            </Required>
+            <Optional />
+          </Properties>
+          <LinkedPasswords>
+            <Link Name="LogonAccount" PropertyIndex="1" />
+            <Link Name="ReconcileAccount" PropertyIndex="3" />
+          </LinkedPasswords>
+          <TicketingSystem EnterTicketingInfo="No" ValidateTicketNumber="No" />
+          <PrivilegedSessionManagement ID="PSMServer_2ab6ce8" />
+          <ConnectionComponents>
+            <ConnectionComponent Id="PSM-VSPHERE" />
+            <ConnectionComponent Id="PSM-VSPHERE-Web" />
+          </ConnectionComponents>
+        </Policy>
+        <Policy ID="WinLooselyDevice" AutoChangeOnAdd="No" AutoVerifyOnAdd="No" PlatformBaseID="WinLooselyDevice" PlatformBaseType="Windows" PlatformBaseProtocol="Windows">
+          <Properties>
+            <Required>
+              <Property Name="Address" />
+              <Property Name="Username" />
+            </Required>
+            <Optional>
+              <Property Name="LogonDomain" ResolveFrom="Address" />
+              <Property Name="Location" />
+              <Property Name="OwnerName" />
+            </Optional>
+          </Properties>
+          <LinkedPasswords>
+            <Link Name="LogonAccount" PropertyIndex="1" />
+            <Link Name="ReconcileAccount" PropertyIndex="3" />
+          </LinkedPasswords>
+          <TicketingSystem EnterTicketingInfo="No" ValidateTicketNumber="No" />
+          <PrivilegedSessionManagement ID="PSMServer_2ab6ce8" />
+          <ConnectionComponents>
+            <ConnectionComponent Id="PSM-RDP" />
+            <ConnectionComponent Id="RDP" />
+            <ConnectionComponent Id="RDPWinApplet" />
+            <ConnectionComponent Id="RDPapplet" />
+          </ConnectionComponents>
+        </Policy>
+        <Policy ID="WindowsDomainLDAP" PlatformBaseID="WindowsDomainLDAP" PlatformBaseType="Windows" PlatformBaseProtocol="Windows" AutoChangeOnAdd="No" AutoVerifyOnAdd="No">
+          <Properties>
+            <Required>
+              <Property Name="Username" />
+              <Property Name="Address" />
+            </Required>
+            <Optional>
+              <Property Name="AuthenticationType" DisplayName="Authentication Type" />
+              <Property Name="Port" />
+              <Property Name="UseSSL" DisplayName="Use SSL" />
+              <Property Name="UnlockUserOnReconcile" DisplayName="Unlock User On Reconcile" />
+              <Property Name="UserDN" DisplayName="User DN" />
+            </Optional>
+          </Properties>
+          <LinkedPasswords>
+            <Link Name="ReconcileAccount" PropertyIndex="3" />
+            <Link Name="LogonAccount" PropertyIndex="1" />
+          </LinkedPasswords>
+          <Usages>
+            <Usage Name="WinService" />
+            <Usage Name="SchedTask" />
+            <Usage Name="IISAppPool" />
+            <Usage Name="Registry" />
+            <Usage Name="ComPlus" />
+            <Usage Name="IISAnonymous" />
+          </Usages>
+          <TicketingSystem EnterTicketingInfo="No" ValidateTicketNumber="No" />
+          <PrivilegedSessionManagement ID="PSMServer_2ab6ce8" />
+          <ConnectionComponents>
+            <ConnectionComponent Id="PSM-RDP">
+              <OverrideUserParameters>
+                <Parameter Name="PSMRemoteMachine" Type="CyberArk.PasswordVault.Web.TransparentConnection.RemoteMachineUserParameter, CyberArk.PasswordVault.Web" />
+                <Parameter Name="LogonDomain" Type="CyberArk.PasswordVault.TransparentConnection.PSM.LogonDomainUserParameter, CyberArk.PasswordVault.TransparentConnection.PSM" />
+              </OverrideUserParameters>
+            </ConnectionComponent>
+          </ConnectionComponents>
+        </Policy>
+      </Policies>
+    </Device>
+    <Device Name="Database">
+      <Properties>
+        <Required>
+        </Required>
+        <Optional />
+      </Properties>
+      <Policies>
+        <Policy ID="DB2UnixSSH" AutoChangeOnAdd="No" AutoVerifyOnAdd="No" PlatformBaseID="DB2UnixSSH" PlatformBaseType="Unix" PlatformBaseProtocol="SSH">
+          <Properties>
+            <Required>
+              <Property Name="Username" />
+              <Property Name="Address" />
+            </Required>
+            <Optional />
+          </Properties>
+          <LinkedPasswords>
+            <Link Name="LogonAccount" PropertyIndex="1" />
+          </LinkedPasswords>
+          <PrivilegedSessionManagement ID="PSMServer_2ab6ce8" />
+          <TicketingSystem EnterTicketingInfo="No" ValidateTicketNumber="No" />
+          <ConnectionComponents>
+            <ConnectionComponent Id="PSM-SSH" />
+            <ConnectionComponent Id="SSH" />
+            <ConnectionComponent Id="PuTTY" Enable="No" />
+          </ConnectionComponents>
+          <OnDemandPrivilegesManager>
+            <Commands />
+            <Defaults />
+            <Authentication />
+            <CommandsGroups>
+              <CommandsGroup Name="SHELLS">
+                <Command Name="/bin/bash" />
+                <Command Name="/bin/csh" />
+                <Command Name="/bin/tcsh" />
+                <Command Name="/bin/ksh" />
+                <Command Name="/bin/ksh93" />
+                <Command Name="/usr/bin/bash" />
+                <Command Name="/usr/bin/csh" />
+                <Command Name="/usr/bin/tcsh" />
+                <Command Name="/usr/bin/ksh" />
+                <Command Name="/opt/freeware/bin/bash" />
+                <Command Name="/opt/freeware/bin/bash_32" />
+                <Command Name="/opt/freeware/bin/bash_64" />
+                <Command Name="/opt/freeware/bin/tcsh" />
+                <Command Name="/bin/sh" />
+                <Command Name="/usr/bin/sh" />
+                <Command Name="/usr/bin/ksh93" />
+              </CommandsGroup>
+              <CommandsGroup Name="BashProfile">
+                <Command Name="/bin/grep .*" />
+                <Command Name="/bin/uname -m" />
+                <Command Name="/sbin/consoletype stdout" />
+                <Command Name="/usr/bin/abrt-cli status .*" />
+                <Command Name="/usr/bin/cat /root/.cache/abrt/lastnotification" />
+                <Command Name="/usr/bin/date \+\%s" />
+                <Command Name="/usr/bin/dircolors --sh .*" />
+                <Command Name="/usr/bin/grep .*" />
+                <Command Name="/usr/bin/id -u" />
+                <Command Name="/usr/bin/ls /etc/bash_completion.d" />
+                <Command Name="/usr/bin/mkdir -p /root/.cache/abrt" />
+                <Command Name="/usr/bin/mktemp .colorlsXXX --tmpdir=/tmp" />
+                <Command Name="/usr/bin/mktemp --tmpdir=/root/.cache/abrt lastnotification.XXXXXXXX" />
+                <Command Name="/usr/bin/mv -i -f /root/.cache/abrt/lastnotification.\w{8} /root/.cache/abrt/lastnotification" />
+                <Command Name="/usr/bin/rm -i -f /tmp/.colorls\w{3}" />
+                <Command Name="/usr/bin/tput colors" />
+                <Command Name="/usr/bin/tty -s" />
+                <Command Name="/usr/bin/uname .*" />
+                <Command Name="/usr/libexec/grepconf.sh -c" />
+                <Command Name="/usr/sbin/lspci" />
+                <Command Name="/bin/ps -p \d+ -ocomm=" />
+                <Command Name="/bin/basename \w+" />
+                <Command Name="/bin/sed -n s\/\[ \t\#\]\.\*\$\/\/\; \/\.\/H\; \$ \{ x\; s\/\^\\n\/\/\; s\/\\n\/\:\/g\; p\; \} /usr/share/Modules/init/.modulespath" />
+              </CommandsGroup>
+              <CommandsGroup Name="tcshProfile">
+                <Command Name="/bin/grep .*" />
+                <Command Name="/bin/sed -n \/\^COLOR\.\*none\/Ip" />
+                <Command Name="/sbin/consoletype stdout" />
+                <Command Name="/usr/bin/cat /etc/DIR_COLORS" />
+                <Command Name="/usr/bin/cut .*" />
+                <Command Name="/usr/bin/dircolors -c .*" />
+                <Command Name="/usr/bin/grep .*" />
+                <Command Name="/usr/bin/id .*" />
+                <Command Name="/usr/bin/mktemp .colorlsXXX --tmpdir=/tmp" />
+                <Command Name="/usr/bin/rm -f /tmp/.colorls\w{3}" />
+                <Command Name="/usr/bin/sed -n \/\^COLOR\.\*none\/Ip" />
+                <Command Name="/usr/bin/test .*" />
+                <Command Name="/usr/bin/tput colors" />
+                <Command Name="/usr/bin/uname -m" />
+                <Command Name="/usr/libexec/grepconf.sh -c" />
+                <Command Name="/usr/sbin/lspci" />
+                <Command Name="/bin/uname -m" />
+                <Command Name="/bin/sed -n s\/\[ \t\#\]\.\*\$\/\/\; \/\.\/H\; \$ \{ x\; s\/\^\\n\/\/\; s\/\\n\/\:\/g\; p\; \} /usr/share/Modules/init/.modulespath" />
+                <Command Name="/bin/cut .*" />
+                <Command Name="/bin/sed s\|\$\|\;\|" />
+                <Command Name="/bin/sed s\|\\\(\[\^\=\]\*\\\)\=\\\(\[\^\=\]\*\\\)\|setenv \\1 \\2\|g" />
+              </CommandsGroup>
+              <CommandsGroup Name="sysconfig-network-linux4">
+                <Command Name="/usr/bin/system-config-network" />
+                <Command Name="/usr/bin/consolehelper-gtk" />
+                <Command Name="/usr/sbin/userhelper .*" />
+                <Command Name="/usr/sbin/system-config-network" />
+                <Command Name="/usr/sbin/system-config-network-tui" />
+                <Command Name="/usr/bin/consolehelper" />
+              </CommandsGroup>
+            </CommandsGroups>
+          </OnDemandPrivilegesManager>
+        </Policy>
+        <Policy ID="InformixUnixSSH" AutoChangeOnAdd="No" AutoVerifyOnAdd="No" PlatformBaseID="InformixUnixSSH" PlatformBaseType="Unix" PlatformBaseProtocol="SSH">
+          <Properties>
+            <Required>
+              <Property Name="Username" />
+              <Property Name="Address" />
+            </Required>
+            <Optional />
+          </Properties>
+          <LinkedPasswords>
+            <Link Name="LogonAccount" PropertyIndex="1" />
+          </LinkedPasswords>
+          <TicketingSystem EnterTicketingInfo="No" ValidateTicketNumber="No" />
+          <PrivilegedSessionManagement ID="PSMServer_2ab6ce8" />
+          <ConnectionComponents>
+            <ConnectionComponent Id="PSM-SSH" />
+            <ConnectionComponent Id="SSH" />
+            <ConnectionComponent Id="PuTTY" Enable="No" />
+          </ConnectionComponents>
+          <OnDemandPrivilegesManager>
+            <Commands />
+            <Defaults />
+            <Authentication />
+            <CommandsGroups>
+              <CommandsGroup Name="SHELLS">
+                <Command Name="/bin/bash" />
+                <Command Name="/bin/csh" />
+                <Command Name="/bin/tcsh" />
+                <Command Name="/bin/ksh" />
+                <Command Name="/bin/ksh93" />
+                <Command Name="/usr/bin/bash" />
+                <Command Name="/usr/bin/csh" />
+                <Command Name="/usr/bin/tcsh" />
+                <Command Name="/usr/bin/ksh" />
+                <Command Name="/opt/freeware/bin/bash" />
+                <Command Name="/opt/freeware/bin/bash_32" />
+                <Command Name="/opt/freeware/bin/bash_64" />
+                <Command Name="/opt/freeware/bin/tcsh" />
+                <Command Name="/bin/sh" />
+                <Command Name="/usr/bin/sh" />
+                <Command Name="/usr/bin/ksh93" />
+              </CommandsGroup>
+              <CommandsGroup Name="BashProfile">
+                <Command Name="/bin/grep .*" />
+                <Command Name="/bin/uname -m" />
+                <Command Name="/sbin/consoletype stdout" />
+                <Command Name="/usr/bin/abrt-cli status .*" />
+                <Command Name="/usr/bin/cat /root/.cache/abrt/lastnotification" />
+                <Command Name="/usr/bin/date \+\%s" />
+                <Command Name="/usr/bin/dircolors --sh .*" />
+                <Command Name="/usr/bin/grep .*" />
+                <Command Name="/usr/bin/id -u" />
+                <Command Name="/usr/bin/ls /etc/bash_completion.d" />
+                <Command Name="/usr/bin/mkdir -p /root/.cache/abrt" />
+                <Command Name="/usr/bin/mktemp .colorlsXXX --tmpdir=/tmp" />
+                <Command Name="/usr/bin/mktemp --tmpdir=/root/.cache/abrt lastnotification.XXXXXXXX" />
+                <Command Name="/usr/bin/mv -i -f /root/.cache/abrt/lastnotification.\w{8} /root/.cache/abrt/lastnotification" />
+                <Command Name="/usr/bin/rm -i -f /tmp/.colorls\w{3}" />
+                <Command Name="/usr/bin/tput colors" />
+                <Command Name="/usr/bin/tty -s" />
+                <Command Name="/usr/bin/uname .*" />
+                <Command Name="/usr/libexec/grepconf.sh -c" />
+                <Command Name="/usr/sbin/lspci" />
+                <Command Name="/bin/ps -p \d+ -ocomm=" />
+                <Command Name="/bin/basename \w+" />
+                <Command Name="/bin/sed -n s\/\[ \t\#\]\.\*\$\/\/\; \/\.\/H\; \$ \{ x\; s\/\^\\n\/\/\; s\/\\n\/\:\/g\; p\; \} /usr/share/Modules/init/.modulespath" />
+              </CommandsGroup>
+              <CommandsGroup Name="tcshProfile">
+                <Command Name="/bin/grep .*" />
+                <Command Name="/bin/sed -n \/\^COLOR\.\*none\/Ip" />
+                <Command Name="/sbin/consoletype stdout" />
+                <Command Name="/usr/bin/cat /etc/DIR_COLORS" />
+                <Command Name="/usr/bin/cut .*" />
+                <Command Name="/usr/bin/dircolors -c .*" />
+                <Command Name="/usr/bin/grep .*" />
+                <Command Name="/usr/bin/id .*" />
+                <Command Name="/usr/bin/mktemp .colorlsXXX --tmpdir=/tmp" />
+                <Command Name="/usr/bin/rm -f /tmp/.colorls\w{3}" />
+                <Command Name="/usr/bin/sed -n \/\^COLOR\.\*none\/Ip" />
+                <Command Name="/usr/bin/test .*" />
+                <Command Name="/usr/bin/tput colors" />
+                <Command Name="/usr/bin/uname -m" />
+                <Command Name="/usr/libexec/grepconf.sh -c" />
+                <Command Name="/usr/sbin/lspci" />
+                <Command Name="/bin/uname -m" />
+                <Command Name="/bin/sed -n s\/\[ \t\#\]\.\*\$\/\/\; \/\.\/H\; \$ \{ x\; s\/\^\\n\/\/\; s\/\\n\/\:\/g\; p\; \} /usr/share/Modules/init/.modulespath" />
+                <Command Name="/bin/cut .*" />
+                <Command Name="/bin/sed s\|\$\|\;\|" />
+                <Command Name="/bin/sed s\|\\\(\[\^\=\]\*\\\)\=\\\(\[\^\=\]\*\\\)\|setenv \\1 \\2\|g" />
+              </CommandsGroup>
+              <CommandsGroup Name="sysconfig-network-linux4">
+                <Command Name="/usr/bin/system-config-network" />
+                <Command Name="/usr/bin/consolehelper-gtk" />
+                <Command Name="/usr/sbin/userhelper .*" />
+                <Command Name="/usr/sbin/system-config-network" />
+                <Command Name="/usr/sbin/system-config-network-tui" />
+                <Command Name="/usr/bin/consolehelper" />
+              </CommandsGroup>
+            </CommandsGroups>
+          </OnDemandPrivilegesManager>
+        </Policy>
+        <Policy ID="MSSql" AutoChangeOnAdd="No" AutoVerifyOnAdd="No" PlatformBaseID="MSSql" PlatformBaseType="MSSql" PlatformBaseProtocol="ODBC">
+          <Properties>
+            <Required>
+              <Property Name="Username" />
+            </Required>
+            <Optional>
+              <Property Name="DSN" />
+              <Property Name="Address" />
+              <Property Name="Port" />
+              <Property Name="Database" />
+              <Property Name="ReconcileIsWinAccount" />
+            </Optional>
+          </Properties>
+          <LinkedPasswords>
+            <Link Name="ReconcileAccount" PropertyIndex="3" />
+          </LinkedPasswords>
+          <TicketingSystem EnterTicketingInfo="No" ValidateTicketNumber="No" />
+          <PrivilegedSessionManagement ID="PSMServer_2ab6ce8" />
+          <ConnectionComponents>
+            <ConnectionComponent Id="PSM-SQLServerMgmtStudio" />
+            <ConnectionComponent Id="PSM-SQLServerMgmtStudio-Database" />
+          </ConnectionComponents>
+        </Policy>
+        <Policy ID="Oracle" AutoChangeOnAdd="No" AutoVerifyOnAdd="No" PlatformBaseID="Oracle" PlatformBaseType="Oracle" PlatformBaseProtocol="ODBC">
+          <Properties>
+            <Required>
+              <Property Name="Username" />
+            </Required>
+            <Optional>
+              <Property Name="DSN" />
+              <Property Name="Address" />
+              <Property Name="Port" />
+              <Property Name="Database" />
+            </Optional>
+          </Properties>
+          <LinkedPasswords>
+            <Link Name="ReconcileAccount" PropertyIndex="3" />
+          </LinkedPasswords>
+          <TicketingSystem EnterTicketingInfo="No" ValidateTicketNumber="No" />
+          <PrivilegedSessionManagement ID="PSMServer_2ab6ce8" />
+          <ConnectionComponents PSMConnectionDefault="PSM-SQLPlus">
+            <ConnectionComponent Id="PSM-SQLPlus" />
+            <ConnectionComponent Id="PSM-TOAD" />
+          </ConnectionComponents>
+        </Policy>
+        <Policy ID="Sybase" AutoChangeOnAdd="No" AutoVerifyOnAdd="No" PlatformBaseID="Sybase" PlatformBaseType="Sybase" PlatformBaseProtocol="ODBC">
+          <Properties>
+            <Required>
+              <Property Name="Username" />
+            </Required>
+            <Optional>
+              <Property Name="DSN" />
+              <Property Name="Address" />
+              <Property Name="Port" />
+              <Property Name="Database" />
+            </Optional>
+          </Properties>
+          <LinkedPasswords>
+            <Link Name="ReconcileAccount" PropertyIndex="3" />
+          </LinkedPasswords>
+          <TicketingSystem EnterTicketingInfo="No" ValidateTicketNumber="No" />
+        </Policy>
+        <Policy ID="MySQL" AutoChangeOnAdd="No" AutoVerifyOnAdd="No" EnableSplitPassword="No" ForceManualPasswordChange="No" PlatformBaseID="MySQL" PlatformBaseType="MySQL" PlatformBaseProtocol="ODBC">
+          <Properties>
+            <Required>
+              <Property Name="Username" />
+            </Required>
+            <Optional>
+              <Property Name="DSN" />
+              <Property Name="Address" />
+              <Property Name="Port" />
+              <Property Name="Database" />
+            </Optional>
+          </Properties>
+          <LinkedPasswords>
+            <Link Name="ReconcileAccount" PropertyIndex="3" />
+          </LinkedPasswords>
+          <TicketingSystem EnterTicketingInfo="Yes" ValidateTicketNumber="No" />
+        </Policy>
+        <Policy ID="SAPHANA" PlatformBaseID="SAPHANA" PlatformBaseType="Database" PlatformBaseProtocol="ODBC">
+          <Properties>
+            <Required>
+              <Property Name="Username" />
+            </Required>
+            <Optional>
+              <Property Name="DSN" />
+              <Property Name="Address" />
+              <Property Name="Port" />
+              <Property Name="Database" />
+              <Property Name="ReconcileIsWinAccount" />
+            </Optional>
+          </Properties>
+          <TicketingSystem EnterTicketingInfo="No" ValidateTicketNumber="No" />
+          <LinkedPasswords>
+            <Link Name="ReconcileAccount" PropertyIndex="3" />
+          </LinkedPasswords>
+          <Usages>
+            <Usage Name="DBString" />
+          </Usages>
+        </Policy>
+      </Policies>
+    </Device>
+    <Device Name="Security Appliance">
+      <Properties>
+        <Required>
+        </Required>
+        <Optional />
+      </Properties>
+      <Policies>
+        <Policy ID="GAiASSH" AutoChangeOnAdd="No" AutoVerifyOnAdd="No" PlatformBaseID="GAiASSH" PlatformBaseType="GAiASSH" PlatformBaseProtocol="SSH">
+          <Properties>
+            <Required>
+              <Property Name="Username" />
+              <Property Name="Address" />
+              <Property Name="Type" DisplayName="GAiA entity type" />
+            </Required>
+            <Optional>
+              <Property Name="Port" />
+            </Optional>
+          </Properties>
+          <LinkedPasswords>
+            <Link Name="LogonAccount" PropertyIndex="1" />
+            <Link Name="ReconcileAccount" PropertyIndex="3" />
+          </LinkedPasswords>
+          <TicketingSystem EnterTicketingInfo="No" ValidateTicketNumber="No" />
+        </Policy>
+        <Policy ID="Firewall1" AutoChangeOnAdd="No" AutoVerifyOnAdd="No" PlatformBaseID="Firewall1" PlatformBaseType="Firewall1" PlatformBaseProtocol="OPSEC">
+          <Properties>
+            <Required>
+              <Property Name="Address" />
+              <Property Name="Username" />
+              <Property Name="ClientDN" />
+              <Property Name="ServerDN" />
+            </Required>
+            <Optional>
+              <Property Name="SicCertFile" />
+              <Property Name="Port" />
+            </Optional>
+          </Properties>
+          <TicketingSystem EnterTicketingInfo="No" ValidateTicketNumber="No" />
+        </Policy>
+      </Policies>
+    </Device>
+    <Device Name="Network Device">
+      <Properties>
+        <Required />
+        <Optional />
+      </Properties>
+      <Policies>
+        <Policy ID="CiscoSSH" AutoChangeOnAdd="No" AutoVerifyOnAdd="No" PlatformBaseID="CiscoSSH" PlatformBaseType="Cisco" PlatformBaseProtocol="SSH">
+          <Properties>
+            <Required>
+              <Property Name="Type" />
+            </Required>
+            <Optional>
+              <Property Name="username" />
+              <Property Name="Address" />
+              <Property Name="Port" />
+              <Property Name="vty" />
+            </Optional>
+          </Properties>
+          <LinkedPasswords>
+            <Link Name="EnableAccount" PropertyIndex="1" />
+            <Link Name="LogonAccount" PropertyIndex="2" />
+            <Link Name="ReconcileAccount" PropertyIndex="3" />
+          </LinkedPasswords>
+          <TicketingSystem EnterTicketingInfo="No" ValidateTicketNumber="No" />
+          <PrivilegedSessionManagement ID="PSMServer_2ab6ce8" />
+          <ConnectionComponents>
+            <ConnectionComponent Id="PSM-SSH" />
+            <ConnectionComponent Id="SSH" />
+            <ConnectionComponent Id="PuTTY" Enable="No" />
+          </ConnectionComponents>
+        </Policy>
+      </Policies>
+    </Device>
+    <Device Name="Directory">
+      <Properties>
+        <Required />
+        <Optional />
+      </Properties>
+      <Policies>
+        <Policy ID="SunOneDirectorySSL" AutoChangeOnAdd="No" AutoVerifyOnAdd="No" PlatformBaseID="SunOneDirectorySSL" PlatformBaseType="SunOneDirectory" PlatformBaseProtocol="SSL">
+          <Properties>
+            <Required>
+              <Property Name="Address" />
+              <Property Name="UserDN" />
+            </Required>
+            <Optional>
+              <Property Name="Port" />
+            </Optional>
+          </Properties>
+          <LinkedPasswords>
+            <Link Name="ReconcileAccount" PropertyIndex="3" />
+          </LinkedPasswords>
+          <TicketingSystem EnterTicketingInfo="No" ValidateTicketNumber="No" />
+        </Policy>
+        <Policy ID="Novell-eDirectory" AutoChangeOnAdd="No" AutoVerifyOnAdd="No" PlatformBaseID="Novell-eDirectory" PlatformBaseType="NovelleDirectory" PlatformBaseProtocol="LDAP">
+          <Properties>
+            <Required>
+              <Property Name="Address" />
+              <Property Name="UserDN" />
+            </Required>
+            <Optional>
+              <Property Name="Port" />
+            </Optional>
+          </Properties>
+          <LinkedPasswords>
+            <Link Name="ReconcileAccount" PropertyIndex="3" />
+          </LinkedPasswords>
+          <TicketingSystem EnterTicketingInfo="No" ValidateTicketNumber="No" />
+        </Policy>
+      </Policies>
+    </Device>
+    <Device Name="PSM Secure Connect" Internal="Yes">
+      <Properties>
+        <Required />
+        <Optional />
+      </Properties>
+      <Policies>
+        <Policy AutoChangeOnAdd="No" AutoVerifyOnAdd="No" ID="PSMSecureConnect" PlatformBaseID="PSMSecureConnect" PlatformBaseType="PSM" PlatformBaseProtocol="PSM">
+          <Properties>
+            <Required>
+              <Property Name="Address" />
+              <Property Name="Username" />
+            </Required>
+            <Optional>
+              <Property Name="DSN" />
+              <Property Name="Port" />
+              <Property Name="Database" />
+              <Property Name="LogonDomain" ResolveFrom="Address" />
+              <Property Name="UserDN" />
+              <Property Name="Location" />
+              <Property Name="OwnerName" />
+              <Property Name="AllowMappingLocalDrives" />
+              <Property Name="AllowConnectToConsole" />
+              <Property Name="ConnectAs" />
+            </Optional>
+          </Properties>
+          <LinkedPasswords>
+            <Link Name="ReconcileAccount" PropertyIndex="3" />
+          </LinkedPasswords>
+          <TicketingSystem EnterTicketingInfo="No" ValidateTicketNumber="No" />
+          <PrivilegedSessionManagement Enable="Yes" DisableDualControlForPSMConnections="Yes" ID="PSMServer_2ab6ce8" />
+          <ConnectionComponents PSMConnectionDefault="PSM-RDP">
+            <ConnectionComponent Id="PSM-SQLPlus">
+              <OverrideUserParameters>
+                <Parameter Name="Port" Value="1521" Required="No" />
+                <Parameter Name="AllowMappingLocalDrives" Type="CyberArk.TransparentConnection.BooleanUserParameter, CyberArk.PasswordVault.TransparentConnection" Value="No" Visible="Yes" />
+                <Parameter Name="Database" Required="No" />
+              </OverrideUserParameters>
+            </ConnectionComponent>
+            <ConnectionComponent Id="PSM-TOAD">
+              <OverrideUserParameters>
+                <Parameter Name="Port" Value="1521" Required="No" />
+                <Parameter Name="AllowMappingLocalDrives" Type="CyberArk.TransparentConnection.BooleanUserParameter, CyberArk.PasswordVault.TransparentConnection" Value="No" Visible="Yes" />
+                <Parameter Name="Database" Required="No" />
+              </OverrideUserParameters>
+            </ConnectionComponent>
+            <ConnectionComponent Id="PSM-SSH">
+              <OverrideUserParameters>
+                <Parameter Name="AllowMappingLocalDrives" Type="CyberArk.TransparentConnection.BooleanUserParameter, CyberArk.PasswordVault.TransparentConnection" Value="No" Visible="Yes" />
+                <Parameter Name="Port" Value="22" />
+              </OverrideUserParameters>
+            </ConnectionComponent>
+            <ConnectionComponent Id="PSM-RDP">
+              <OverrideUserParameters>
+                <Parameter Name="Port" Value="3389" />
+                <Parameter Name="AllowMappingLocalDrives" Type="CyberArk.TransparentConnection.BooleanUserParameter, CyberArk.PasswordVault.TransparentConnection" Value="No" Visible="Yes" />
+                <Parameter Name="AllowConnectToConsole" Type="CyberArk.TransparentConnection.BooleanUserParameter, CyberArk.PasswordVault.TransparentConnection" Value="No" Visible="Yes" />
+                <Parameter Name="LogonDomain" Type="CyberArk.PasswordVault.TransparentConnection.RDP.LogonDomainUserParameter, CyberArk.PasswordVault.TransparentConnection.RDP" Required="No" />
+              </OverrideUserParameters>
+            </ConnectionComponent>
+            <ConnectionComponent Id="PSM-WinSCP">
+              <OverrideUserParameters>
+                <Parameter Name="AllowMappingLocalDrives" Type="CyberArk.TransparentConnection.BooleanUserParameter, CyberArk.PasswordVault.TransparentConnection" Value="No" Visible="Yes" />
+                <Parameter Name="Port" Value="22" />
+              </OverrideUserParameters>
+            </ConnectionComponent>
+            <ConnectionComponent Id="PSM-VSPHERE">
+              <OverrideUserParameters>
+                <Parameter Name="AllowMappingLocalDrives" Type="CyberArk.TransparentConnection.BooleanUserParameter, CyberArk.PasswordVault.TransparentConnection" Value="No" Visible="Yes" />
+              </OverrideUserParameters>
+            </ConnectionComponent>
+            <ConnectionComponent Id="PSM-AS400">
+              <OverrideUserParameters>
+                <Parameter Name="AllowMappingLocalDrives" Type="CyberArk.TransparentConnection.BooleanUserParameter, CyberArk.PasswordVault.TransparentConnection" Value="No" Visible="Yes" />
+              </OverrideUserParameters>
+            </ConnectionComponent>
+            <ConnectionComponent Id="PSM-OS390">
+              <OverrideUserParameters>
+                <Parameter Name="AllowMappingLocalDrives" Type="CyberArk.TransparentConnection.BooleanUserParameter, CyberArk.PasswordVault.TransparentConnection" Value="No" Visible="Yes" />
+              </OverrideUserParameters>
+            </ConnectionComponent>
+            <ConnectionComponent Id="PSM-SQLServerMgmtStudio">
+              <OverrideUserParameters>
+                <Parameter Name="AllowMappingLocalDrives" Type="CyberArk.TransparentConnection.BooleanUserParameter, CyberArk.PasswordVault.TransparentConnection" Value="No" Visible="Yes" />
+                <Parameter Name="Database" Required="No" />
+              </OverrideUserParameters>
+            </ConnectionComponent>
+          </ConnectionComponents>
+        </Policy>
+      </Policies>
+    </Device>
+    <Device Name="Cloud Service">
+      <Properties>
+        <Required />
+        <Optional />
+      </Properties>
+      <Policies>
+        <Policy ID="AWS" PlatformBaseID="AmazonWebServices" PlatformBaseType="AmazonWebServices" PlatformBaseProtocol="HTTP">
+          <Properties>
+            <Required>
+              <Property Name="Username" />
+              <Property Name="Address" />
+              <Property Name="AWSAccountID" DisplayName="AWS Account ID Number" />
+            </Required>
+            <Optional>
+              <Property Name="AWSARNRole" DisplayName="AWS ARN Role" />
+              <Property Name="AWSPolicy" DisplayName="AWS Policy" />
+              <Property Name="AWSAccountAliasName" DisplayName="AWS Account Alias Name" />
+              <Property Name="WebApplicationID" DisplayName="Web Application ID" />
+            </Optional>
+          </Properties>
+          <LinkedPasswords>
+            <Link Name="LogonAccount" PropertyIndex="1" />
+            <Link Name="ReconcileAccount" PropertyIndex="3" />
+          </LinkedPasswords>
+          <TicketingSystem EnterTicketingInfo="No" ValidateTicketNumber="No" />
+          <PrivilegedSessionManagement ID="PSMServer_2ab6ce8" />
+          <ConnectionComponents>
+            <ConnectionComponent Id="PSM-AWSConsoleWithSTS" />
+          </ConnectionComponents>
+        </Policy>
+        <Policy ID="AWSAccessKeys" PlatformBaseID="AmazonWebServices-API" PlatformBaseType="AmazonWebServices" PlatformBaseProtocol="HTTP">
+          <Properties>
+            <Required>
+              <Property Name="Username" DisplayName="AWS IAM Username" />
+              <Property Name="AWSAccessKeyID" DisplayName="AWS Access Key ID" />
+              <Property Name="AWSAccountID" DisplayName="AWS Account ID Number" />
+            </Required>
+            <Optional>
+              <Property Name="AWSAccountAliasName" DisplayName="AWS Account Alias Name" />
+            </Optional>
+          </Properties>
+          <TicketingSystem EnterTicketingInfo="No" ValidateTicketNumber="No" />
+          <ConnectionComponents />
+        </Policy>
+        <Policy ID="AzureApplicationKeys" PlatformBaseID="AzureApplicationKeys" PlatformBaseType="Cloud" PlatformBaseProtocol="Rest">
+          <Properties>
+            <Required>
+              <Property Name="ApplicationID" />
+              <Property Name="ApplicationObjectID" />
+              <Property Name="KeyID" DisplayName="Key ID" />
+            </Required>
+            <Optional>
+              <Property Name="Username" />
+              <Property Name="ActiveDirectoryID" />
+              <Property Name="Duration" />
+              <Property Name="PopulateIfNotExist" />
+              <Property Name="Address" />
+              <Property Name="KeyDescription" />
+            </Optional>
+          </Properties>
+          <LinkedPasswords>
+            <Link Name="LogonAccount" PropertyIndex="1" />
+            <Link Name="ApplicationAccount" PropertyIndex="2" DisplayName="Application Account" />
+            <Link Name="ReconcileAccount" PropertyIndex="3" />
+          </LinkedPasswords>
+          <TicketingSystem EnterTicketingInfo="No" ValidateTicketNumber="No" />
+          <ConnectionComponents />
+        </Policy>
+        <Policy ID="AzurePasswordManagement" PlatformBaseID="AzurePasswordManagement" PlatformBaseProtocol="Rest" PlatformBaseType="Cloud">
+          <Properties>
+            <Required>
+              <Property Name="Username" />
+              <Property Name="ActiveDirectoryID" />
+            </Required>
+            <Optional>
+              <Property Name="ApplicationID" />
+              <Property Name="Address" />
+              <Property Name="WebApplicationID" DisplayName="Web Application ID" />
+            </Optional>
+          </Properties>
+          <LinkedPasswords>
+            <Link Name="LogonAccount" PropertyIndex="1" />
+            <Link Name="ApplicationAccount" DisplayName="Application Account" PropertyIndex="2" />
+            <Link Name="ReconcileAccount" PropertyIndex="3" />
+          </LinkedPasswords>
+          <TicketingSystem EnterTicketingInfo="No" ValidateTicketNumber="No" />
+          <PrivilegedSessionManagement ID="PSMServer_2ab6ce8" />
+          <ConnectionComponents>
+            <ConnectionComponent Id="PSM-MS-AzurePortal" />
+          </ConnectionComponents>
+        </Policy>
+        <Policy ID="GCPServiceAccount" PlatformBaseID="GoogleCloudPlatform" PlatformBaseType="GoogleCloudPlatform" PlatformBaseProtocol="HTTP">
+          <Properties>
+            <Required>
+              <Property Name="KeyID" DisplayName="Key ID" />
+              <Property Name="Username" DisplayName="Client Email" />
+            </Required>
+            <Optional>
+              <Property Name="PopulateKey" DisplayName="Populate Key" />
+            </Optional>
+          </Properties>
+          <LinkedPasswords>
+            <Link Name="ChangeAccount" PropertyIndex="2" DisplayName="Change Account" />
+            <Link Name="ReconcileAccount" PropertyIndex="3" />
+          </LinkedPasswords>
+          <TicketingSystem EnterTicketingInfo="No" ValidateTicketNumber="No" />
+        </Policy>
+      </Policies>
+    </Device>
+    <Device Name="Misc">
+      <Properties>
+        <Required />
+        <Optional />
+      </Properties>
+      <Policies>
+        <Policy ID="SampleGroup" PlatformBaseID="SampleGroup" PlatformBaseType="Group" PlatformBaseProtocol="Group">
+          <TicketingSystem />
+          <Properties>
+            <Required />
+            <Optional />
+          </Properties>
+        </Policy>
+        <Policy ID="SampleSSHKeyGroup" PlatformBaseID="SampleSSHKeyGroup" PlatformBaseType="Group" PlatformBaseProtocol="Group">
+          <TicketingSystem />
+          <Properties>
+            <Required />
+            <Optional />
+          </Properties>
+        </Policy>
+        <Policy ID="LinuxAdmin" PlatformBaseID="SampleGroup" PlatformBaseType="Group" PlatformBaseProtocol="Group">
+          <TicketingSystem />
+          <Properties>
+            <Required />
+            <Optional />
+          </Properties>
+        </Policy>
+      </Policies>
+    </Device>
+    <Device Name="Website">
+      <Policies>
+        <Policy ID="BusinessWebsite" AutoChangeOnAdd="No" AutoVerifyOnAdd="No" PlatformBaseID="BusinessWebsite" PlatformBaseType="BusinessWebsite" PlatformBaseProtocol="HTTP">
+          <Properties>
+            <Required>
+              <Property Name="ItemName" DisplayName="Item Name" />
+            </Required>
+            <Optional>
+              <Property Name="Username" ResolveFrom="" />
+              <Property Name="URL" DisplayName="URL" />
+              <Property Name="Tags" />
+              <Property Name="Notes" />
+            </Optional>
+          </Properties>
+          <TicketingSystem EnterTicketingInfo="No" ValidateTicketNumber="No" />
+        </Policy>
+        <Policy ID="GenericWebApp" PlatformBaseID="GenericWebApp" PlatformBaseType="Website" PlatformBaseProtocol="Https" AutoChangeOnAdd="No" AutoVerifyOnAdd="No">
+          <Properties>
+            <Required>
+              <Property Name="Username" />
+              <Property Name="Address" />
+            </Required>
+            <Optional />
+          </Properties>
+          <LinkedPasswords>
+            <Link Name="ReconcileAccount" PropertyIndex="3" />
+          </LinkedPasswords>
+          <TicketingSystem EnterTicketingInfo="No" ValidateTicketNumber="No" />
+        </Policy>
+      </Policies>
+    </Device>
+  </Devices>
+  <Usages>
+    <Usage ID="WinService" PlatformBaseID="WinService" PlatformBaseType="WinService" PlatformBaseProtocol="WinService">
+      <Properties>
+        <Required>
+          <Property Name="ServiceName" />
+          <Property Name="Address" />
+        </Required>
+        <Optional>
+          <Property Name="RestartService" />
+        </Optional>
+      </Properties>
+      <LinkedPasswords>
+        <Link Name="LogonAccount" PropertyIndex="1" />
+      </LinkedPasswords>
+      <DisplayedColumns>
+        <Column Name="ServiceName" />
+        <Column Name="Address" />
+        <Column Name="RestartService" />
+      </DisplayedColumns>
+    </Usage>
+    <Usage ID="SchedTask" PlatformBaseID="SchedTask" PlatformBaseType="SchedTask" PlatformBaseProtocol="SchedTask">
+      <Properties>
+        <Required>
+          <Property Name="TaskName" />
+          <Property Name="Address" />
+        </Required>
+        <Optional>
+          <Property Name="TaskFolder" />
+        </Optional>
+      </Properties>
+      <LinkedPasswords>
+        <Link Name="LogonAccount" PropertyIndex="1" />
+      </LinkedPasswords>
+      <DisplayedColumns>
+        <Column Name="TaskName" />
+        <Column Name="Address" />
+      </DisplayedColumns>
+    </Usage>
+    <Usage ID="IISAppPool" PlatformBaseID="IISAppPool" PlatformBaseType="IISAppPool" PlatformBaseProtocol="WMI">
+      <Properties>
+        <Required>
+          <Property Name="AppPoolName" />
+          <Property Name="Address" />
+        </Required>
+        <Optional>
+          <Property Name="RestartService" />
+        </Optional>
+      </Properties>
+      <LinkedPasswords>
+        <Link Name="LogonAccount" PropertyIndex="1" />
+      </LinkedPasswords>
+      <DisplayedColumns>
+        <Column Name="AppPoolName" />
+        <Column Name="Address" />
+        <Column Name="RestartService" />
+      </DisplayedColumns>
+    </Usage>
+    <Usage ID="Registry" PlatformBaseID="Registry" PlatformBaseType="Registry" PlatformBaseProtocol="WMI">
+      <Properties>
+        <Required>
+          <Property Name="RegistryPathName" />
+          <Property Name="RegistryValueName" />
+          <Property Name="Address" />
+        </Required>
+        <Optional>
+          <Property Name="Prefix" />
+          <Property Name="Postfix" />
+        </Optional>
+      </Properties>
+      <DisplayedColumns>
+        <Column Name="RegistryPathName" />
+        <Column Name="RegistryValueName" />
+        <Column Name="Address" />
+      </DisplayedColumns>
+      <LinkedPasswords>
+        <Link Name="LogonAccount" DisplayName="Logon Account" PropertyIndex="1" />
+      </LinkedPasswords>
+    </Usage>
+    <Usage ID="ComPlus" PlatformBaseID="COMPlus" PlatformBaseType="COMPlus" PlatformBaseProtocol="COM">
+      <Properties>
+        <Required>
+          <Property Name="ApplicationName" />
+          <Property Name="Address" />
+        </Required>
+        <Optional>
+          <Property Name="Restart" />
+        </Optional>
+      </Properties>
+      <DisplayedColumns>
+        <Column Name="ApplicationName" />
+        <Column Name="Address" />
+        <Column Name="Restart" />
+      </DisplayedColumns>
+      <LinkedPasswords>
+        <Link Name="LogonAccount" PropertyIndex="1" />
+      </LinkedPasswords>
+    </Usage>
+    <Usage ID="IISAnonymous" PlatformBaseID="IISAnonymous" PlatformBaseType="IISAnonymous" PlatformBaseProtocol="WMI">
+      <Properties>
+        <Required>
+          <Property Name="WebSiteName" />
+          <Property Name="Address" />
+        </Required>
+        <Optional>
+          <Property Name="WebSiteID" />
+          <Property Name="VirtualDirPath" />
+        </Optional>
+      </Properties>
+      <DisplayedColumns>
+        <Column Name="WebSiteName" />
+        <Column Name="Address" />
+        <Column Name="WebSiteID" />
+      </DisplayedColumns>
+      <LinkedPasswords>
+        <Link Name="LogonAccount" PropertyIndex="1" />
+      </LinkedPasswords>
+    </Usage>
+    <Usage ID="DBString" PlatformBaseID="DBString" PlatformBaseType="DBString" PlatformBaseProtocol="ODBC">
+      <Properties>
+        <Required>
+          <Property Name="UsageDisplayName" />
+        </Required>
+        <Optional>
+          <Property Name="DSN" />
+          <Property Name="Address" />
+          <Property Name="Port" />
+          <Property Name="Database" />
+          <Property Name="TableName" />
+          <Property Name="ColumnName" />
+          <Property Name="UniqueIDColumnName" />
+          <Property Name="UniqueIDColumnValue" />
+        </Optional>
+      </Properties>
+      <DisplayedColumns>
+        <Column Name="UsageDisplayName" />
+      </DisplayedColumns>
+      <LinkedPasswords>
+        <Link Name="LogonAccount" PropertyIndex="1" />
+      </LinkedPasswords>
+    </Usage>
+    <Usage ID="INIFile" PlatformBaseID="INIFile" PlatformBaseType="INIFile" PlatformBaseProtocol="SFTP">
+      <Properties>
+        <Required>
+          <Property Name="Address" />
+          <Property Name="FilePath" />
+          <Property Name="ConnectionType" />
+          <Property Name="INIParameterName" />
+          <Property Name="INISection" />
+        </Required>
+        <Optional>
+          <Property Name="Port" />
+          <Property Name="BackupPasswordFile" />
+          <Property Name="ConnectionTimeout" />
+          <Property Name="UsageDisplayName" />
+        </Optional>
+      </Properties>
+      <DisplayedColumns>
+        <Column Name="FilePath" />
+        <Column Name="INIParameterName" />
+        <Column Name="Address" />
+      </DisplayedColumns>
+      <LinkedPasswords>
+        <Link Name="LogonAccount" PropertyIndex="1" />
+      </LinkedPasswords>
+    </Usage>
+    <Usage ID="TextFile" PlatformBaseID="TextFile" PlatformBaseType="TextFile" PlatformBaseProtocol="SFTP">
+      <Properties>
+        <Required>
+          <Property Name="Address" />
+          <Property Name="FilePath" />
+          <Property Name="PasswordRegex" />
+          <Property Name="ConnectionType" />
+        </Required>
+        <Optional>
+          <Property Name="Port" />
+          <Property Name="BackupPasswordFile" />
+          <Property Name="ConnectionTimeout" />
+          <Property Name="UsageDisplayName" />
+        </Optional>
+      </Properties>
+      <DisplayedColumns>
+        <Column Name="FilePath" />
+        <Column Name="PasswordRegex" />
+        <Column Name="Address" />
+      </DisplayedColumns>
+      <LinkedPasswords>
+        <Link Name="LogonAccount" PropertyIndex="1" />
+      </LinkedPasswords>
+    </Usage>
+    <Usage ID="WebFile" PlatformBaseID="WebFile" PlatformBaseType="WebFile" PlatformBaseProtocol="SFTP">
+      <Properties>
+        <Required>
+          <Property Name="Address" />
+          <Property Name="FilePath" />
+          <Property Name="ConnectionType" />
+          <Property Name="XMLElement" />
+        </Required>
+        <Optional>
+          <Property Name="Port" />
+          <Property Name="BackupPasswordFile" />
+          <Property Name="ConnectionTimeout" />
+          <Property Name="UsageDisplayName" />
+          <Property Name="PasswordRegex" />
+          <Property Name="XMLAttribute" />
+        </Optional>
+      </Properties>
+      <DisplayedColumns>
+        <Column Name="FilePath" />
+        <Column Name="XMLElement" />
+        <Column Name="Address" />
+      </DisplayedColumns>
+      <LinkedPasswords>
+        <Link Name="LogonAccount" PropertyIndex="1" />
+      </LinkedPasswords>
+    </Usage>
+    <Usage ID="XMLFile" PlatformBaseID="XMLFile" PlatformBaseType="XMLFile" PlatformBaseProtocol="SFTP">
+      <Properties>
+        <Required>
+          <Property Name="Address" />
+          <Property Name="FilePath" />
+          <Property Name="ConnectionType" />
+          <Property Name="XMLElement" />
+        </Required>
+        <Optional>
+          <Property Name="Port" />
+          <Property Name="BackupPasswordFile" />
+          <Property Name="ConnectionTimeout" />
+          <Property Name="UsageDisplayName" />
+          <Property Name="PasswordRegex" />
+          <Property Name="XMLAttribute" />
+        </Optional>
+      </Properties>
+      <DisplayedColumns>
+        <Column Name="FilePath" />
+        <Column Name="XMLElement" />
+        <Column Name="Address" />
+      </DisplayedColumns>
+      <LinkedPasswords>
+        <Link Name="LogonAccount" PropertyIndex="1" />
+      </LinkedPasswords>
+    </Usage>
+    <Usage ID="PrivateSSHKey" PlatformBaseID="PrivateSSHKey" PlatformBaseType="PrivateSSHKey" PlatformBaseProtocol="SFTP">
+      <Properties>
+        <Required>
+          <Property Name="Address" />
+          <Property Name="FilePath" />
+          <Property Name="ConnectionType" />
+        </Required>
+        <Optional>
+          <Property Name="Port" />
+          <Property Name="BackupPrivateSSHKey" />
+          <Property Name="ConnectionTimeout" />
+          <Property Name="UsageDisplayName" />
+        </Optional>
+      </Properties>
+      <DisplayedColumns>
+        <Column Name="FilePath" />
+        <Column Name="Address" />
+      </DisplayedColumns>
+      <LinkedPasswords>
+        <Link Name="LogonAccount" PropertyIndex="1" />
+      </LinkedPasswords>
+    </Usage>
+  </Usages>
+</PasswordVaultPolicies>
