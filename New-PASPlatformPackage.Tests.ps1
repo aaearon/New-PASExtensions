@@ -1,7 +1,5 @@
-﻿BeforeAll {
+BeforeAll {
     . .\New-PASPlatformPackage.ps1
-
-
 }
 
 Describe 'New-PASPlatformPackage' {
@@ -60,6 +58,7 @@ Describe 'New-PASPlatformPackage' {
                 -PlatformId $PlatformId `
                 -CPMPolicyFile (Join-Path -Path $TestDrive -ChildPath 'my-platforms-cpm-settings.ini') `
                 -ExtractPVWASettings $true `
+                -ExtractPlatform 'WinServerLocal' `
                 -PoliciesFile (Join-Path -Path $TestDrive -ChildPath 'Policies.xml') `
                 -DestinationPath $TestDrive
 
@@ -71,7 +70,7 @@ Describe 'New-PASPlatformPackage' {
         It 'it can create it based on an existing Policies.xml' {
             [xml]$PlatformSettingsXml = Get-Content $ExpectedPVWASettingsPath
 
-            Select-Xml $PlatformSettingsXml -XPath "//Device[@Name='Application']/Policies/Policy[@ID='CyberArk']/PrivilegedSessionManagement[@ID='PSMServer_2ab6ce8']" | Should -Be $true
+            Select-Xml $PlatformSettingsXml -XPath "//Policies/Policy[@ID='WinServerLocal']/PrivilegedSessionManagement[@ID='PSMServer_2ab6ce8']" | Should -Be $true
         }
     }
 }

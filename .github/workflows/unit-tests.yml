@@ -4,7 +4,10 @@ on: [push, pull_request, workflow_dispatch]
 jobs:
   pester-tests:
     name: Run Pester tests
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-2016, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
       - name: Perform all Pester tests
