@@ -129,7 +129,6 @@
                 $PVWASettingsFilePath = Join-Path -Path $PlatformWorkingDirectory -ChildPath "Policy-$PlatformId.xml"
 
                 $Settings = Get-PlatformPVWASettings -PlatformId $ExtractPlatform -PoliciesFile $PoliciesFile
-
                 $Settings | Set-Content -Path $PVWASettingsFilePath
 
                 $FilesToArchive += $PVWASettingsFilePath
