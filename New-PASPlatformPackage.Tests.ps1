@@ -1,4 +1,4 @@
-﻿BeforeAll {
+BeforeAll {
     . .\New-PASPlatformPackage.ps1
 }
 
