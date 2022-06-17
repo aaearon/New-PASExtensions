@@ -55,13 +55,21 @@
         [string]
         $PVWASettingsFile,
 
-        # Parameter help description
+        # Extract the platform's settings out of an existing Policies.xml file
         [Parameter(
             Mandatory = $false,
             ParameterSetName = 'ExtractPVWASettings'
         )]
         [boolean]
         $ExtractPVWASettings,
+
+        # The platform settings to extract out of the Policies file.
+        [Parameter(
+            Mandatory = $false,
+            ParameterSetName = 'ExtractPVWASettings'
+        )]
+        [string]
+        $ExtractPlatform = $PlatformId,
 
         [Parameter(
             Mandatory = $true,
@@ -120,7 +128,7 @@
             'ExtractPVWASettings' {
                 $PVWASettingsFilePath = Join-Path -Path $PlatformWorkingDirectory -ChildPath "Policy-$PlatformId.xml"
 
-                $Settings = Get-PlatformPVWASettings -PlatformId $PlatformId -PoliciesFile $PoliciesFile
+                $Settings = Get-PlatformPVWASettings -PlatformId $ExtractPlatform -PoliciesFile $PoliciesFile
                 $Settings | Set-Content -Path $PVWASettingsFilePath
 
                 $FilesToArchive += $PVWASettingsFilePath
