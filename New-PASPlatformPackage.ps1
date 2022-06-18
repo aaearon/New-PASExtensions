@@ -228,7 +228,7 @@ function Update-PlatformXml{
    )
 
     $Xml = [xml](Get-Content -Path $PlatformXmlFile)
-    $PolicyNode = $Xml.SelectSingleNode("//Policy")
+    $PolicyNode = $Xml.SelectSingleNode("//Policy | //Usage")
     $PolicyNode.SetAttribute('ID', $PlatformId)
     $Xml.Save((Get-ChildItem $PlatformXmlFile | Select-Object FullName).FullName)
 }
