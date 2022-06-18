@@ -60,17 +60,18 @@ Describe 'New-PASPlatformPackage' {
                 -ExtractPVWASettings $true `
                 -ExtractPlatform 'WinServerLocal' `
                 -PoliciesFile (Join-Path -Path $TestDrive -ChildPath 'Policies.xml') `
-                -DestinationPath $TestDrive
+                -DestinationPath $TestDrive `
+                -OverwritePolicyIds $true
 
             Expand-Archive -Path $CreatedArchivePath -DestinationPath $ExpandedArchivePath
         }
         It 'names the PVWA settings file based on the platformid' {
             Test-Path -Path $ExpectedPVWASettingsPath | Should -Be $true
         }
-        It 'it can create it based on an existing Policies.xml' {
+        It 'can create it based on an existing Policies.xml' {
             [xml]$PlatformSettingsXml = Get-Content $ExpectedPVWASettingsPath
 
-            Select-Xml $PlatformSettingsXml -XPath "//Policies/Policy[@ID='WinServerLocal']/PrivilegedSessionManagement[@ID='PSMServer_2ab6ce8']" | Should -Be $true
+            Select-Xml $PlatformSettingsXml -XPath "//Policies/Policy[@ID='CyberArk']/PrivilegedSessionManagement[@ID='PSMServer_2ab6ce8']" | Should -Be $true
         }
     }
 }
