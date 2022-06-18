@@ -106,7 +106,19 @@
             Mandatory = $false,
             ParameterSetName = 'ProvidePVWASettings'
         )]
-        $DestinationPath = $PWD
+        $DestinationPath = $PWD,
+
+        # Overwrite policy ID in all platform files..
+        [Parameter(
+            Mandatory = $false,
+            ParameterSetName = 'ExtractPVWASettings'
+        )]
+        [Parameter(
+            Mandatory = $false,
+            ParameterSetName = 'ProvidePVWASettings'
+        )]
+        [boolean]
+        $OverwritePolicyIds = $false
     )
 
     begin {
@@ -117,11 +129,15 @@
         New-Item -Path $PlatformWorkingDirectory -ItemType Directory
 
         $CPMPolicyFile = Copy-Item -Path $CPMPolicyFile -Destination (Join-Path -Path $PlatformWorkingDirectory -ChildPath "Policy-$PlatformId.ini") -PassThru
+        if ($OverwritePolicyIds) { (Get-Content -Path $CPMPolicyFile) -replace 'PolicyID=(?<id>[\w\d]*)',"PolicyID=$PlatformId" | Set-Content -Path $CPMPolicyFile }
+
         $FilesToArchive += $CPMPolicyFile
 
         switch ($PSCmdlet.ParameterSetName) {
             'ProvidePVWASettings' {
                 $PVWASettingsFile = Copy-Item -Path $PVWASettingsFile -Destination (Join-Path -Path $PlatformWorkingDirectory -ChildPath "Policy-$PlatformId.xml") -PassThru
+
+                if ($OverwritePolicyIds) { Update-PlatformXml -PlatformXmlFile $PVWASettingsFile -PlatformId $PlatformId }
 
                 $FilesToArchive += $PVWASettingsFile
             }
@@ -130,6 +146,8 @@
 
                 $Settings = Get-PlatformPVWASettings -PlatformId $ExtractPlatform -PoliciesFile $PoliciesFile
                 $Settings | Set-Content -Path $PVWASettingsFilePath
+
+                if ($OverwritePolicyIds) { Update-PlatformXml -PlatformXmlFile $PVWASettingsFilePath -PlatformId $PlatformId }
 
                 $FilesToArchive += $PVWASettingsFilePath
             }
@@ -201,4 +219,16 @@ function New-TemporaryDirectory {
     $parent = [System.IO.Path]::GetTempPath()
     [string] $name = [System.Guid]::NewGuid()
     New-Item -ItemType Directory -Path (Join-Path $parent $name)
+}
+
+function Update-PlatformXml{
+    param(
+    $PlatformId,
+    $PlatformXmlFile
+   )
+
+    $Xml = [xml](Get-Content -Path $PlatformXmlFile)
+    $PolicyNode = $Xml.SelectSingleNode("//Policy")
+    $PolicyNode.SetAttribute('ID', $PlatformId)
+    $Xml.Save((Get-ChildItem $PlatformXmlFile | Select-Object FullName).FullName)
 }
