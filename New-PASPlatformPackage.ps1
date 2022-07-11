@@ -129,7 +129,7 @@
         New-Item -Path $PlatformWorkingDirectory -ItemType Directory
 
         $CPMPolicyFile = Copy-Item -Path $CPMPolicyFile -Destination (Join-Path -Path $PlatformWorkingDirectory -ChildPath "Policy-$PlatformId.ini") -PassThru
-        if ($OverwritePolicyIds) { (Get-Content -Path $CPMPolicyFile) -replace 'PolicyID=(?<id>[\w\d]*)',"PolicyID=$PlatformId" | Set-Content -Path $CPMPolicyFile }
+        if ($OverwritePolicyIds) { (Get-Content -Path $CPMPolicyFile) -replace 'PolicyID=(?<id>[\w\d]*)', "PolicyID=$PlatformId" | Set-Content -Path $CPMPolicyFile }
 
         $FilesToArchive += $CPMPolicyFile
 
@@ -221,11 +221,11 @@ function New-TemporaryDirectory {
     New-Item -ItemType Directory -Path (Join-Path $parent $name)
 }
 
-function Update-PlatformXml{
+function Update-PlatformXml {
     param(
-    $PlatformId,
-    $PlatformXmlFile
-   )
+        $PlatformId,
+        $PlatformXmlFile
+    )
 
     $Xml = [xml](Get-Content -Path $PlatformXmlFile)
     $PolicyNode = $Xml.SelectSingleNode("//Policy")
