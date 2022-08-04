@@ -156,9 +156,8 @@
     process {
         if ($Path.Count -gt 0) {
             $FilesToArchive += Get-ChildItem -Path $Path | ForEach-Object FullName
-        }
-        else {
-            Write-Debug "No platform files passed!"
+        } else {
+            Write-Debug 'No platform files passed!'
         }
     }
     end {
@@ -180,7 +179,7 @@ function Update-PlatformXml {
     )
 
     $Xml = [xml](Get-Content -Path $PlatformXmlFile)
-    $PolicyNode = $Xml.SelectSingleNode("//Policy")
+    $PolicyNode = $Xml.SelectSingleNode('//Policy')
     $PolicyNode.SetAttribute('ID', $PlatformId)
     $Xml.Save((Get-ChildItem $PlatformXmlFile | Select-Object FullName).FullName)
 }

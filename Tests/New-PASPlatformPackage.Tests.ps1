@@ -8,8 +8,8 @@ Describe 'New-PASPlatformPackage' {
         $PlatformId = 'SamplePlatform'
         $CreatedArchivePath = Join-Path -Path $TestDrive -ChildPath "$PlatformId.zip"
         $ExpandedArchivePath = Join-Path -Path $TestDrive -ChildPath $PlatformId
-        $CPMPolicyFile = Join-Path -Path $TestDrive -ChildPath "my-platforms-cpm-settings.ini"
-        $PVWASettingsFile = Join-Path -Path $TestDrive -ChildPath "my-platforms-pvwa-settings.xml"
+        $CPMPolicyFile = Join-Path -Path $TestDrive -ChildPath 'my-platforms-cpm-settings.ini'
+        $PVWASettingsFile = Join-Path -Path $TestDrive -ChildPath 'my-platforms-pvwa-settings.xml'
 
         # Create dummy files for the required platform files.
         Out-File -Path $CPMPolicyFile -Force
@@ -39,8 +39,8 @@ Describe 'New-PASPlatformPackage' {
         It 'it must contain a <Type> file named <Name>' {
             Test-Path -Path (Join-Path -Path $TestDrive -ChildPath $PlatformId -AdditionalChildPath $Name) | Should -Be $true
         }  -ForEach @(
-            @{Type = 'CPM policy'; Name = "Policy-SamplePlatform.ini" }
-            @{Type = 'PVWA settings'; Name = "Policy-SamplePlatform.xml" }
+            @{Type = 'CPM policy'; Name = 'Policy-SamplePlatform.ini' }
+            @{Type = 'PVWA settings'; Name = 'Policy-SamplePlatform.xml' }
         )
     }
 
@@ -52,7 +52,7 @@ Describe 'New-PASPlatformPackage' {
 
             $ExpectedPVWASettingsPath = Join-Path -Path $ExpandedArchivePath -ChildPath "Policy-$PlatformId.xml"
 
-            $CPMPolicyFile = Join-Path -Path $TestDrive -ChildPath "my-platforms-cpm-settings.ini"
+            $CPMPolicyFile = Join-Path -Path $TestDrive -ChildPath 'my-platforms-cpm-settings.ini'
             Out-File -Path $CPMPolicyFile -Force
             Copy-Item '.\Tests\*.xml' -Destination $TestDrive -Force
 

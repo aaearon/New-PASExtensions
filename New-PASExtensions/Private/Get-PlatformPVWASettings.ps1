@@ -15,8 +15,7 @@
     if ($PlatformXml.Name -eq 'Usage') {
         $SettingsXml = $PlatformXml
 
-    }
-    elseif ($PlatformXml.Name -eq 'Policy') {
+    } elseif ($PlatformXml.Name -eq 'Policy') {
 
         # Get name of the Device
         $DeviceName = $PlatformXml.ParentNode.ParentNode.Name

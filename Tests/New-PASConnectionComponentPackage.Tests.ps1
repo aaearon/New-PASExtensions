@@ -17,7 +17,7 @@ Describe 'New-PASConnectionComponentPackage' {
             $parameters = @{
                 ConnectionComponentId               = $ConnectionComponentId
                 ConnectionComponentApplicationPaths = @('C:\SampleApp\SampleApp.exe', 'C:\SampleApp\Driver.exe')
-                DestinationPath                     = "$TestDrive"
+                DestinationPath                     = $TestDrive
             }
             Get-ChildItem -Path $BuildDirectory | New-PASConnectionComponentPackage @parameters
 
@@ -38,9 +38,9 @@ Describe 'New-PASConnectionComponentPackage' {
 
             $parameters = @{
                 ConnectionComponentId               = $ConnectionComponentId
-                Path                                = "$TestDrive"
+                Path                                = $TestDrive
                 ConnectionComponentApplicationPaths = @('C:\SampleApp\SampleApp.exe', 'C:\SampleApp\Driver.exe')
-                DestinationPath                     = "$TestDrive"
+                DestinationPath                     = $TestDrive
             }
             New-PASConnectionComponentPackage @parameters
 
@@ -79,9 +79,9 @@ Describe 'New-PASConnectionComponentPackage' {
 
             $parameters = @{
                 ConnectionComponentId               = $ConnectionComponentId
-                Path                                = "$TestDrive"
+                Path                                = $TestDrive
                 ConnectionComponentApplicationPaths = @('C:\SampleApp\SampleApp.exe', 'C:\SampleApp\Driver.exe')
-                DestinationPath                     = "$TestDrive"
+                DestinationPath                     = $TestDrive
                 CreateConnectionComponentXmlFile    = $true
                 PVConfigurationPath                 = $PVConfigurationPath
             }
