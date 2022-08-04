@@ -1,5 +1,5 @@
 BeforeAll {
-    . .\New-PASPlatformPackage.ps1
+    Import-Module $PSScriptRoot\..\New-PASExtensions\New-PASExtensions.psd1 -Force
 }
 
 Describe 'New-PASPlatformPackage' {
@@ -52,7 +52,7 @@ Describe 'New-PASPlatformPackage' {
 
             $CPMPolicyFile = Join-Path -Path $TestDrive -ChildPath "my-platforms-cpm-settings.ini"
             Out-File -Path $CPMPolicyFile -Force
-            Copy-Item *.xml -Destination $TestDrive -Force
+            Copy-Item '.\Tests\*.xml' -Destination $TestDrive -Force
 
             $DestinationPath = Join-Path -Path $TestDrive -ChildPath (New-Guid)
             New-Item -Path $DestinationPath -ItemType Directory
@@ -79,23 +79,3 @@ Describe 'New-PASPlatformPackage' {
     }
 }
 
-Describe 'Get-PlatformPVWASettings' {
-    It 'extracts the PVWA settings for a <PlatformType> out of an existing Policies.xml' {
-        $PlatformSettings = Get-PlatformPVWASettings -PoliciesFile '.\Policies.xml' -PlatformId $PlatformId
-        $PlatformSettingsXml = [xml]$PlatformSettings
-
-        Select-Xml -Xml $PlatformSettingsXml -XPath "//$PlatformType[@ID='$PlatformId']" | Should -Be $true
-    } -ForEach @(
-        @{PlatformType = 'Usage'; PlatformId = 'INIFile' }
-        @{PlatformType = 'Policy'; PlatformId = 'CyberArk' }
-    )
-
-    Context 'when getting the PVWA settings for a Policy' {
-        It 'puts the PVWA settings as a child node to a policies node which is a child to a device node' {
-            $PlatformSettings = Get-PlatformPVWASettings -PoliciesFile '.\Policies.xml' -PlatformId CyberArk
-            $PlatformSettingsXml = [xml]$PlatformSettings
-
-            Select-Xml -Xml $PlatformSettingsXml -XPath "//Device[@Name='Application']/Policies/Policy[@ID='CyberArk']" | Should -Be $true
-        }
-    }
-}

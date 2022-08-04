@@ -13,4 +13,4 @@ jobs:
       - name: Execute all Pester tests
         shell: pwsh
         run: |
-          Invoke-Pester *.Tests.ps1 -Passthru
+          Invoke-Pester .\Tests\*.Tests.ps1 -Passthru
