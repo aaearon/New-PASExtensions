@@ -21,11 +21,13 @@ Describe 'New-PASPlatformPackage' {
         Out-File -Path (Join-Path -Path $BuildDirectory -ChildPath 'Prompts.ini') -Force
         Out-File -Path (Join-Path -Path $BuildDirectory -ChildPath 'Processes.ini') -Force
 
-        Get-ChildItem -Path $BuildDirectory `
-        | New-PASPlatformPackage -PlatformId $PlatformId `
-            -CPMPolicyFile $CPMPolicyFile `
-            -PVWASettingsFile $PVWASettingsFile `
-            -DestinationPath $TestDrive
+        $parameters = @{
+            PlatformId       = $PlatformId
+            CPMPolicyFile    = $CPMPolicyFile
+            PVWASettingsFile = $PVWASettingsFile
+            DestinationPath  = $TestDrive
+        }
+        Get-ChildItem -Path $BuildDirectory | New-PASPlatformPackage @parameters
 
         # Expand the archive as the tests depend on it.
         Expand-Archive $CreatedArchivePath -DestinationPath $ExpandedArchivePath
@@ -57,14 +59,16 @@ Describe 'New-PASPlatformPackage' {
             $DestinationPath = Join-Path -Path $TestDrive -ChildPath (New-Guid)
             New-Item -Path $DestinationPath -ItemType Directory
 
-            New-PASPlatformPackage `
-                -PlatformId $PlatformId `
-                -CPMPolicyFile $CPMPolicyFile `
-                -ExtractPVWASettings $true `
-                -ExtractPlatform 'WinServerLocal' `
-                -PoliciesFile (Join-Path -Path $TestDrive -ChildPath 'Policies.xml') `
-                -DestinationPath $TestDrive `
-                -OverwritePolicyIds $true
+            $parameters = @{
+                PlatformId          = $PlatformId
+                CPMPolicyFile       = $CPMPolicyFile
+                ExtractPVWASettings = $true
+                ExtractPlatform     = 'WinServerLocal'
+                PoliciesFile        = (Join-Path -Path $TestDrive -ChildPath 'Policies.xml')
+                DestinationPath     = $TestDrive
+                OverwritePolicyIds  = $true
+            }
+            New-PASPlatformPackage @parameters
 
             Expand-Archive -Path $CreatedArchivePath -DestinationPath $ExpandedArchivePath
         }

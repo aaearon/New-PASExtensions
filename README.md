@@ -27,13 +27,16 @@ Given a directory of files that make up the connection component / connector, it
 Creates a connection component package zip archive for the `PSM-SampleApp` connection component. It includes all the files in `C:\SampleAppDispatcherFiles` directory and creates a `package.json` where `C:\SampleApp\SampleApp.exe` will be added to the AppLocker rules. It also extracts the connection component settings from the existing `PVConfiguration.xml` file defined and adds them as `CC-PSM-SampleApp.xml` to the archive.
 
 ```powershell
-New-PASConnectionComponentPackage `
-    -ConnectionComponentId PSM-SampleApp `
-    -Path C:\SampleAppDispatcherFiles `
-    -ConnectionComponentApplicationPaths @('C:\SampleApp\SampleApp.exe') `
-    -CreateConnectionComponentXmlFile $true `
-    -PVConfigurationPath 'C:\Program Files (x86)\CyberArk\PSM\Temp\PVConfiguration.xml' `
-    -DestinationPath C:\ConnectionComponentPackages
+$parameters = @{
+    ConnectionComponentId               = 'PSM-SampleApp'
+    Path                                = 'C:\SampleAppDispatcherFiles'
+    ConnectionComponentApplicationPaths = @('C:\SampleApp\SampleApp.exe')
+    CreateConnectionComponentXmlFile    = $true
+    PVConfigurationPath                 = 'C:\Program Files (x86)\CyberArk\PSM\Temp\PVConfiguration.xml'
+    DestinationPath                     = 'C:\ConnectionComponentPackages'
+}
+
+New-PASConnectionComponentPackage @parameters
 ```
 
 ## New-PASPlatformPackage
@@ -61,9 +64,12 @@ Given an existing PVWA settings file and a CPM file that make up the platform, i
 Creates a platform package zip archive for the SamplePlatform platform using the provided CPM policy file. The PVWA settings file is extracted out of an existing `Policies.xml` file and included in the zip archive.
 
 ```powershell
-New-PASPlatformPackage `
-   -PlatformId 'SamplePlatform' `
-   -CPMPolicyFile 'C:\SamplePlatformBuild\my-platforms-cpm-settings.ini' `
-   -ExtractPVWASettings $true `
-   -PoliciesFile 'C:\Program Files (x86)\CyberArk\PSM\Temp'
+$parameters = @{
+    PlatformId          = 'SamplePlatform'
+    CPMPolicyFile       = 'C:\SamplePlatformBuild\my-platforms-cpm-settings.ini'
+    ExtractPVWASettings = $true
+    PoliciesFile        = 'C:\Program Files (x86)\CyberArk\PSM\Temp'
+}
+
+New-PASPlatformPackage @parameters
 ```

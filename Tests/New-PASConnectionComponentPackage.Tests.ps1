@@ -14,15 +14,16 @@ Describe 'New-PASConnectionComponentPackage' {
             Out-File -Path (Join-Path -Path $BuildDirectory -ChildPath 'Dispatcher.exe') -Force
             Out-File -Path (Join-Path -Path $BuildDirectory -ChildPath 'DispatcherUtils.dll') -Force
 
-            Get-ChildItem -Path $BuildDirectory `
-            | New-PASConnectionComponentPackage -ConnectionComponentId $ConnectionComponentId `
-                -ConnectionComponentApplicationPaths @('C:\SampleApp\SampleApp.exe', 'C:\SampleApp\Driver.exe') `
-                -DestinationPath "$TestDrive"
+            $parameters = @{
+                ConnectionComponentId               = $ConnectionComponentId
+                ConnectionComponentApplicationPaths = @('C:\SampleApp\SampleApp.exe', 'C:\SampleApp\Driver.exe')
+                DestinationPath                     = "$TestDrive"
+            }
+            Get-ChildItem -Path $BuildDirectory | New-PASConnectionComponentPackage @parameters
 
             Expand-Archive $CreatedArchivePath -DestinationPath $ExpandedArchivePath
             Test-Path -Path "$TestDrive\PSM-SampleApp\Dispatcher.exe" | Should -Be $true
             Test-Path -Path "$TestDrive\PSM-SampleApp\DispatcherUtils.dll" | Should -Be $true
-
         }
     }
 
@@ -34,10 +35,14 @@ Describe 'New-PASConnectionComponentPackage' {
             $ExpectedPackageJsonPath = Join-Path -Path $ExpandedArchivePath -ChildPath 'package.json'
 
             Out-File -Path (Join-Path -Path $TestDrive -ChildPath 'Dispatcher.exe')
-            New-PASConnectionComponentPackage -ConnectionComponentId $ConnectionComponentId `
-                -Path "$TestDrive" `
-                -ConnectionComponentApplicationPaths @('C:\SampleApp\SampleApp.exe', 'C:\SampleApp\Driver.exe') `
-                -DestinationPath "$TestDrive" `
+
+            $parameters = @{
+                ConnectionComponentId               = $ConnectionComponentId
+                Path                                = "$TestDrive"
+                ConnectionComponentApplicationPaths = @('C:\SampleApp\SampleApp.exe', 'C:\SampleApp\Driver.exe')
+                DestinationPath                     = "$TestDrive"
+            }
+            New-PASConnectionComponentPackage @parameters
 
             Expand-Archive $CreatedArchivePath -DestinationPath $ExpandedArchivePath
         }
@@ -72,12 +77,15 @@ Describe 'New-PASConnectionComponentPackage' {
             Out-File -Path (Join-Path -Path $TestDrive -ChildPath 'Dispatcher.exe')
             Copy-Item '.\Tests\PVConfiguration.xml' -Destination $PVConfigurationPath -Force
 
-            New-PASConnectionComponentPackage -ConnectionComponentId $ConnectionComponentId `
-                -Path "$TestDrive" `
-                -ConnectionComponentApplicationPaths @('C:\SampleApp\SampleApp.exe', 'C:\SampleApp\Driver.exe') `
-                -DestinationPath "$TestDrive" `
-                -CreateConnectionComponentXmlFile $true `
-                -PVConfigurationPath $PVConfigurationPath
+            $parameters = @{
+                ConnectionComponentId               = $ConnectionComponentId
+                Path                                = "$TestDrive"
+                ConnectionComponentApplicationPaths = @('C:\SampleApp\SampleApp.exe', 'C:\SampleApp\Driver.exe')
+                DestinationPath                     = "$TestDrive"
+                CreateConnectionComponentXmlFile    = $true
+                PVConfigurationPath                 = $PVConfigurationPath
+            }
+            New-PASConnectionComponentPackage @parameters
 
             Expand-Archive $CreatedArchivePath -DestinationPath $ExpandedArchivePath
         }
